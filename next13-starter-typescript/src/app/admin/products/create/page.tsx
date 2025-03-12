@@ -16,7 +16,7 @@ function CreateCategory() {
     });
     const router = useRouter();
     
-    const [categories, setCategories] = useState();
+    const [categories, setCategories] = useState<any[]>([]);
     const handleReloadP = () =>{
         setReloadP(!reloadP);
     }
@@ -35,14 +35,14 @@ function CreateCategory() {
         };
         fetchCategories();
     }, []);
-    const formatCategories = (categories, parentId = null) => { 
-        let nestedCategories = [];
+    const formatCategories = (categories:any, parentId = null) => { 
+        let nestedCategories : any = [] ;
         categories
-            .filter((cat) => cat.parent_id === parentId) 
-            .forEach((cat) => {
+            .filter((cat : any) => cat.parent_id === parentId) 
+            .forEach((cat : any) => {
                 nestedCategories.push({ ...cat, label: cat.title });
                 const subCategories = formatCategories(categories, cat._id); 
-                subCategories.forEach((sub) => {
+                subCategories.forEach((sub: any) => {
                     nestedCategories.push({ ...sub, label: `-- ${sub.label} --` });
                 });
             });
@@ -51,22 +51,22 @@ function CreateCategory() {
     };
     // console.log(categories);
     console.log(formData);
-    const handleChange = (e) => {
+    const handleChange = (e:any) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
-    const handleImageChange = (e) => {
+    const handleImageChange = (e:any) => {
         const files = Array.from(e.target.files);
-        const newImages = files.filter(file => !formData.images.some(img => img.name === file.name));
-        setFormData(prev => ({ ...prev, images: [...prev.images, ...newImages] }));
+        const newImages = files.filter((file: any) => !formData.images.some((img: any) => img.name === file.name));
+        setFormData((prev: any) => ({ ...prev, images: [...prev.images, ...newImages] }));
     };
 
-    const handleRemoveImage = (index) => {
+    const handleRemoveImage = (index:any) => {
         setFormData(prev => ({ ...prev, images: prev.images.filter((_, i) => i !== index) }));
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e:any) => {
         e.preventDefault();
 
         const formDataToSend = new FormData();
