@@ -1,0 +1,148 @@
+@import "bootstrap/scss/bootstrap";
+
+.footer{
+    background-color: #F0F0F0;
+    margin-top: 170px;
+    &__banner{
+        transform: translateY(-50%);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-left: 64px;
+        padding-right: 64px;
+        padding-top: 36px;
+        padding-bottom: 36px;
+        background-color: aquamarine;
+        border-radius: 20px;
+        @include media-breakpoint-down(md){
+            align-items: unset;
+            flex-direction: column;
+            justify-content: center;
+            padding-left: 24px;
+            padding-right: 24px;
+            padding-top: 32px;
+            padding-bottom: 28px;
+            gap: 32px;
+        }
+        span{
+            font-weight: 700;
+            font-size: 4rem;
+            color: #FFFFFF;
+            line-height: 45px;
+            max-width: 551px;
+            @include media-breakpoint-down(md){
+                line-height: 35px;
+                font-size: 3.2rem;
+                max-width: 297px;
+            }
+        }
+        &--box{
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            @include media-breakpoint-down(md){
+                gap: 12px;
+            }
+            &__email{
+                background-color: #fff;
+                padding: 12px 16px;
+                width: 349px;
+                border-radius: 62px;
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                input{
+                    flex: 1;
+                }
+                @include media-breakpoint-down(md){
+                    width: auto;
+                    height: 42px;
+                }
+            }
+            button{
+                padding: 15px 0;
+                background-color: #FFFFFF;
+                color: #000000;
+                border-radius: 62px;
+                @include media-breakpoint-down(md){
+                    height: 42px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+            }
+        }
+    }
+    &__content{
+        // padding-top: 140px;
+        margin-top: -40px;
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 50px;
+        @include media-breakpoint-down(md){
+            margin-top: -103px;
+            flex-wrap: wrap;
+            row-gap: 24.42px;
+        }
+        &--first{
+            @include media-breakpoint-down(md){
+                width: 100%;
+                // margin-bottom: 24.42px;
+            }
+            &__content{
+                font-weight: 400;
+                font-size: 1.4rem;
+                color: #00000099;
+                line-height: 22px;
+                max-width: 248px;
+                margin-top: 25px;
+                margin-bottom: 35px;
+                @include media-breakpoint-down(md){
+                    max-width: unset;
+                    margin-top: 14px;
+                    font-size: 1.4rem;
+                    line-height: 20px;
+                    margin-bottom: 20px;
+                }
+            }
+            &__icon{
+                display: flex;
+                gap: 12px;
+            }
+        }
+        &--second{
+            display: flex;
+            flex-direction: column;
+            gap: 26px;
+            @include media-breakpoint-down(md){
+                width: 50%;
+            }
+            &__title{
+                font-weight: 500;
+                font-size: 1.6rem;
+            }
+            &__content{
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+                font-weight: 400;
+                font-size: 1.6rem;
+                color: #00000099;
+            }
+        }
+    }
+    &__line{
+        border: 1px solid #0000001A;
+        color: #0000001A;
+        margin-bottom: 25px;
+    }
+    &__bottom{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        @include media-breakpoint-down(md){
+            flex-direction: column;
+            row-gap: 16px;
+        }
+    }
+}

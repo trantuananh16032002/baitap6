@@ -1,0 +1,68 @@
+@import "bootstrap/scss/bootstrap";
+.top{
+    text-align: center;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    background-color: #000000;
+    color: #fff;
+    &__top{
+        text-decoration: underline;
+        color: #ddd;
+        &:hover{
+            color: blue;
+        }
+    }
+    @include media-breakpoint-down(md) {
+        font-size: 1.2rem;
+    }
+}
+.header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    &__nav{
+        ul{
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            li{
+                a{
+                    display: flex;
+                    align-items: center;
+                    gap: 4px;
+                }
+            }
+        }
+    }
+    &__logo{
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
+}
+.search{
+    display: flex;
+    align-items: center;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    padding-left: 16px;
+    padding-right: 16px;
+    gap: 12px;
+    background-color: #F0F0F0;
+    width: 577px;
+    border-radius: 62px;
+    input{
+        flex: 1;
+    }
+}
+.action{
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding-top: 24px;
+    padding-bottom: 24px;
+    @include media-breakpoint-down(md) {
+        padding-top: 12px;
+        padding-bottom: 12px;
+    }
+}
