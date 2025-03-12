@@ -180,7 +180,7 @@ export default async function Home() {
                   {/* <Carousel /> */}
                 <div className="products__wrapper mt-5">
                     {products.map((product) => (
-                        <Link href={`/product/${product._id}`} className="products__link">
+                        <Link key={product._id} href={`/product/${product._id}`} className="products__link">
                             <div key={product._id} className=" products__slide--item">
                                 <img
                                     className="products__slide--item__img"

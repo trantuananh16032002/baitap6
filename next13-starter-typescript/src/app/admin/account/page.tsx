@@ -79,7 +79,7 @@ function Account() {
                 <tbody>
                     {account && account.length > 0 ? (
                         account.map((acc, index) => (
-                            <tr key={acc.id}>
+                            <tr key={acc._id}>
                                 <td>{index + 1}</td>
                                 <td>{acc.username}</td>
                                 <td>{acc.role === "admin" ? "Quản trị viên" : "Quản lý nội dung"}</td>

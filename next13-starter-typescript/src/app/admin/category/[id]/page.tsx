@@ -167,7 +167,7 @@ function EditCategory(){
                     </label>
                     <div className="form--add__item--radio">
                         <div>
-                            <input type="radio" id="active" name="status" value="active" defaultChecked onChange={handleChange} checked={formData.status === "active"}/>
+                            <input type="radio" id="active" name="status" value="active"  onChange={handleChange} checked={formData.status === "active"}/>
                             <label htmlFor="active">Hoạt động</label>
                         </div>
                         <div>

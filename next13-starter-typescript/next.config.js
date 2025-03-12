@@ -1,11 +1,10 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-    webpack: (config) => {
-      // Bật hỗ trợ top-level await trong Webpack
-      config.experiments = { topLevelAwait: true };
-      return config;
-    },
-    reactStrictMode: true, // Bật React Strict Mode
-  };
-  
-module.exports = nextConfig;
+module.exports = {
+  webpack(config, { isServer }) {
+    // Kích hoạt experiments.layers
+    config.experiments = {
+      layers: true
+    };
+
+    return config;
+  }
+};
