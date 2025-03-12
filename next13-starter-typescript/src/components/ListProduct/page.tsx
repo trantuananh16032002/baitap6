@@ -24,7 +24,7 @@ export default function Carousel() {
 
   return (
     <Flickity className="carousel mt-5" options={flickityOptions}>
-      {products.map((product) => (
+      {products.map((product : any) => (
         <div key={product._id} className="carousel-cell products__slide--item">
           <img
             className="products__slide--item__img"

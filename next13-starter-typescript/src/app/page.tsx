@@ -59,7 +59,7 @@ export default async function Home() {
             <div className="container">
             <div className="products__title">NEW ARRIVALS</div>
             <div className="products__wrapper mt-5">
-                {products.map((product) => (
+                {products.map((product : any) => (
                     <Link key={product._id} href={`/product/${product._id}`} className="products__link">
                         <div key={product._id} className=" products__slide--item">
                             <img
