@@ -1,10 +1,11 @@
 "use client";
 
-function AdminPage ({ children }: { children: React.ReactNode }){
-    return(
-        <> 
-            <h1>ok</h1>
-        </>
-    )
+function AdminPage() {
+  return (
+    <>
+      <h1>ok</h1>
+    </>
+  );
 }
-export default AdminPage
+
+export default AdminPage;
