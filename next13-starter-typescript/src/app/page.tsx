@@ -164,7 +164,7 @@ export default async function Home() {
                                   <img src="/img/oke.svg" alt=""/>
                               </div>
                               <div className="customer__content--item__content">
-                                  "As someone who's always on the lookout for unique fashion pieces, I'm thrilled to have stumbled upon Shop.co. The selection of clothes is not only diverse but also on-point with the latest trends.”
+                                    &quot;As someone who&apos;s always on the lookout for unique fashion pieces, I&apos;m thrilled to have stumbled upon Shop.co. The selection of clothes is not only diverse but also on-point with the latest trends.&quot;
                               </div>
                           </div>
                       </div>
