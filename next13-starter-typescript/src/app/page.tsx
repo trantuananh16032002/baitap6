@@ -2,15 +2,8 @@
 
 import Footer from "@/components/Footer/page";
 import Header from "@/components/Header/page";
-import Carousel from "@/components/ListProduct/page";
 import { getProducts } from "@/lib/getProducts";
-const flickityOptions = {
-    groupCells: true,
-    wrapAround: true,
-    autoPlay: 3000,
-  };
 import { motion } from "framer-motion";
-import { a } from "framer-motion/dist/types.d-6pKw1mTI";
 import Link from "next/link";
 export default async function Home() {
     const products = await getProducts();
@@ -63,121 +56,7 @@ export default async function Home() {
           
           <div className="products">
               <div className="container">
-                  <div className="products__title">NEW ARRIVALS</div>
-                  {/* <div className="products__slide">
-                      <div className="products__wrapper">
-                          <div className="products__slide--item">
-                              <img className="products__slide--item__img" src="/img/prd1.svg" alt=""/>
-                              <p className="products__slide--item__title">T-shirt with Tape Details</p>
-                              <div className="products__slide--item__rate">
-                                  <div className="products__slide--item__rate--star">
-                                      <img src="/img/star.svg" alt=""/>
-                                      <img src="/img/star.svg" alt=""/>
-                                      <img src="/img/star.svg" alt=""/>
-                                      <img src="/img/star.svg" alt=""/>
-                                      <img src="/img/star12.svg" alt=""/>
-                                  </div>
-                                  <div className="products__slide--item__rate--point">
-                                      4.5/5
-                                  </div>
-                              </div>
-                              <div className="products__slide--item__price">
-                                  <span className="products__slide--item__price--new">$120</span>
-                                  <span className="products__slide--item__price--old"><del>$240</del></span>
-                                  <span className="products__slide--item__price--discount">-20%</span>
-                              </div>
-                          </div>
-                          <div className="products__slide--item">
-                              <img className="products__slide--item__img" src="/img/prd1.svg" alt=""/>
-                              <p className="products__slide--item__title">T-shirt with Tape Details</p>
-                              <div className="products__slide--item__rate">
-                                  <div className="products__slide--item__rate--star">
-                                      <img src="/img/star.svg" alt=""/>
-                                      <img src="/img/star.svg" alt=""/>
-                                      <img src="/img/star.svg" alt=""/>
-                                      <img src="/img/star.svg" alt=""/>
-                                      <img src="/img/star12.svg" alt=""/>
-                                  </div>
-                                  <div className="products__slide--item__rate--point">
-                                      4.5/5
-                                  </div>
-                              </div>
-                              <div className="products__slide--item__price">
-                                  <span className="products__slide--item__price--new">$120</span>
-                                  <span className="products__slide--item__price--old"><del>$240</del></span>
-                                  <span className="products__slide--item__price--discount">-20%</span>
-                              </div>
-                          </div>
-                          
-                          
-                          <div className="products__slide--item">
-                              <img className="products__slide--item__img" src="/img/prd1.svg" alt=""/>
-                              <p className="products__slide--item__title">T-shirt with Tape Details</p>
-                              <div className="products__slide--item__rate">
-                                  <div className="products__slide--item__rate--star">
-                                      <img src="/img/star.svg" alt=""/>
-                                      <img src="/img/star.svg" alt=""/>
-                                      <img src="/img/star.svg" alt=""/>
-                                      <img src="/img/star.svg" alt=""/>
-                                      <img src="/img/star12.svg" alt=""/>
-                                  </div>
-                                  <div className="products__slide--item__rate--point">
-                                      4.5/5
-                                  </div>
-                              </div>
-                              <div className="products__slide--item__price">
-                                  <span className="products__slide--item__price--new">$120</span>
-                                  <span className="products__slide--item__price--old"><del>$240</del></span>
-                                  <span className="products__slide--item__price--discount">-20%</span>
-                              </div>
-                          </div>
-                          
-                          <div className="products__slide--item">
-                              <img className="products__slide--item__img" src="/img/prd1.svg" alt=""/>
-                              <p className="products__slide--item__title">T-shirt with Tape Details</p>
-                              <div className="products__slide--item__rate">
-                                  <div className="products__slide--item__rate--star">
-                                      <img src="/img/star.svg" alt=""/>
-                                      <img src="/img/star.svg" alt=""/>
-                                      <img src="/img/star.svg" alt=""/>
-                                      <img src="/img/star.svg" alt=""/>
-                                      <img src="/img/star12.svg" alt=""/>
-                                  </div>
-                                  <div className="products__slide--item__rate--point">
-                                      4.5/5
-                                  </div>
-                              </div>
-                              <div className="products__slide--item__price">
-                                  <span className="products__slide--item__price--new">$120</span>
-                                  <span className="products__slide--item__price--old"><del>$240</del></span>
-                                  <span className="products__slide--item__price--discount">-20%</span>
-                              </div>
-                          </div>
-                          
-                          <div className="products__slide--item">
-                              <img className="products__slide--item__img" src="/img/prd1.svg" alt=""/>
-                              <p className="products__slide--item__title">T-shirt with Tape Details</p>
-                              <div className="products__slide--item__rate">
-                                  <div className="products__slide--item__rate--star">
-                                      <img src="/img/star.svg" alt=""/>
-                                      <img src="/img/star.svg" alt=""/>
-                                      <img src="/img/star.svg" alt=""/>
-                                      <img src="/img/star.svg" alt=""/>
-                                      <img src="/img/star12.svg" alt=""/>
-                                  </div>
-                                  <div className="products__slide--item__rate--point">
-                                      4.5/5
-                                  </div>
-                              </div>
-                              <div className="products__slide--item__price">
-                                  <span className="products__slide--item__price--new">$120</span>
-                                  <span className="products__slide--item__price--old"><del>$240</del></span>
-                                  <span className="products__slide--item__price--discount">-20%</span>
-                              </div>
-                          </div>
-                      </div>
-                  </div> */}
-                  {/* <Carousel /> */}
+                <div className="products__title">NEW ARRIVALS</div>
                 <div className="products__wrapper mt-5">
                     {products.map((product) => (
                         <Link key={product._id} href={`/product/${product._id}`} className="products__link">
@@ -202,9 +81,8 @@ export default async function Home() {
                                     <span className="products__slide--item__price--new">{product.price}.VND</span>
                                 </div>
                             </div>
-                        </Link>
-                            
-                        ))}
+                        </Link> 
+                    ))}
                 </div>
                   
 
@@ -238,7 +116,7 @@ export default async function Home() {
                                   <img src="/img/oke.svg" alt=""/>
                               </div>
                               <div className="customer__content--item__content">
-                                  "I'm blown away by the quality and style of the clothes I received from Shop.co. From casual wear to elegant dresses, every piece I've bought has exceeded my expectations.”
+                                    "I'm blown away by the quality and style of the clothes I received from Shop.co. From casual wear to elegant dresses, every piece I&apos;ve bought has exceeded my expectations.”
                               </div>
                           </div>
                           <div className="customer__content--item">
@@ -254,7 +132,7 @@ export default async function Home() {
                                   <img src="/img/oke.svg" alt=""/>
                               </div>
                               <div className="customer__content--item__content">
-                                  "Finding clothes that align with my personal style used to be a challenge until I discovered Shop.co. The range of options they offer is truly remarkable, catering to a variety of tastes and occasions.”
+                                    "Finding clothes that align with my personal style used to be a challenge until I discovered Shop.co. The range of options they offer is truly remarkable, catering to a variety of tastes and occasions.&quot;"
                               </div>
                           </div>
                           <div className="customer__content--item">
@@ -270,7 +148,7 @@ export default async function Home() {
                                   <img src="/img/oke.svg" alt=""/>
                               </div>
                               <div className="customer__content--item__content">
-                                  "As someone who's always on the lookout for unique fashion pieces, I'm thrilled to have stumbled upon Shop.co. The selection of clothes is not only diverse but also on-point with the latest trends.”
+                                    "As someone who&apos;s always on the lookout for unique fashion pieces, I&apos;m thrilled to have stumbled upon Shop.co. The selection of clothes is not only diverse but also on-point with the latest trends.&quot;"
                               </div>
                           </div>
                           
