@@ -1,4 +1,4 @@
-"use client";
+// "use client";
 
 import Footer from "@/components/Footer/page";
 import Header from "@/components/Header/page";
@@ -14,14 +14,15 @@ export default async function Home() {
             <div className="banner">
                 <div className="container">
                     <div>
-                        <motion.div
-                            className="banner__title"
-                            initial={{ opacity: 0, letterSpacing: "-5px" }}
-                            animate={{ opacity: 1, letterSpacing: "normal" }}
-                            transition={{ duration: 1.5, ease: "easeInOut" }}
-                            >
+                        {/* <motion.div
+                        </motion.div> */}
+                        <div className="banner__title">
                             FIND CLOTHES THAT MATCHES YOUR STYLE
-                        </motion.div>
+                        </div>
+                        {/* initial={{ opacity: 0, letterSpacing: "-5px" }}
+                        animate={{ opacity: 1, letterSpacing: "normal" }}
+                        transition={{ duration: 1.5, ease: "easeInOut" }} */}
+                        
                         <div className="banner__subtitle">Browse through our diverse range of meticulously crafted garments, designed to bring out your individuality and cater to your sense of style.</div>
                         <button className="banner__button">Shop Now</button>
                         <div className="stats">
@@ -151,22 +152,6 @@ export default async function Home() {
                                 &quot;As someone who&apos;s always on the lookout for unique fashion pieces, I&apos;m thrilled to have stumbled upon Shop.co. The selection of clothes is not only diverse but also on-point with the latest trends.&quot;
                             </div>
                         </div>                   
-                        <div className="customer__content--item">
-                            <div className="customer__content--item__star">
-                                <img src="/img/star.svg" alt=""/>
-                                <img src="/img/star.svg" alt=""/>
-                                <img src="/img/star.svg" alt=""/>
-                                <img src="/img/star.svg" alt=""/>
-                                <img src="/img/star.svg" alt=""/>
-                            </div>
-                            <div className="customer__content--item__name">
-                                <span>Sarah M.</span>
-                                <img src="/img/oke.svg" alt=""/>
-                            </div>
-                            <div className="customer__content--item__content">
-                                &quot;As someone who&apos;s always on the lookout for unique fashion pieces, I&apos;m thrilled to have stumbled upon Shop.co. The selection of clothes is not only diverse but also on-point with the latest trends.&quot;
-                            </div>
-                        </div>
                     </div>
                     
                 </div>

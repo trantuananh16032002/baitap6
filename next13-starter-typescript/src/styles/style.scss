@@ -374,6 +374,7 @@ body{
             display: flex;
             transition: transform 0.5s ease-in-out;
             gap: 20px;
+            // justify-content: space-between;
             @include media-breakpoint-down(md){
                 width: 100%;
             }
@@ -385,10 +386,9 @@ body{
             border: 1px solid #0000001A;
             border-radius: 20px;
             transition: transform 0.3s ease-in-out;
-            //test
-            height: 240px;
-            width: 400px;
-            flex-shrink: 0;
+            // height: 240px;
+            flex: 1;
+            aspect-ratio: 395/240;
             @include media-breakpoint-down(md){
                 width: 100%;
             }

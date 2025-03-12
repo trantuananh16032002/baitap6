@@ -23,6 +23,7 @@ function CreateCategory(){
                     throw new Error(`Lỗi API: ${res.status}`);
                 }
                 const data = await res.json();
+                console.log(data);
                 setCategories(formatCategories(data));
             } catch (err) {
                 console.error("Lỗi khi lấy danh mục:", err);
@@ -75,6 +76,7 @@ function CreateCategory(){
         } catch (err) {
         }
     };
+    
     const formatCategories = (categories, parentId = null) => { 
         let nestedCategories = [];
     

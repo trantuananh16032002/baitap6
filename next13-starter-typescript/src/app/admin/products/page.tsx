@@ -9,38 +9,27 @@ async function fetchProducts() {
     return res.json();
 }
 async function Products(){
-    // const [products, setProducts] = useState();
-    // const router = useRouter();
     const productsSSR = await fetchProducts();
     console.log(productsSSR);
+    // const handleDelete = async (productId) => {
+    //     if (!window.confirm("Bạn có chắc chắn muốn xóa sản phẩm này không?")) return;
 
-    // useEffect(() => {
-    //     const fetchApi = async () =>{
-    //         const response = await fetch("http://localhost:5000/api/products");
-    //         const data = await response.json();
-    //         setProducts(data);
+    //     try {
+    //         const response = await fetch(`http://localhost:5000/api/products/${productId}`, {
+    //             method: "DELETE",
+    //         });
+
+    //         if (response.ok) {
+    //             alert("Xóa sản phẩm thành công!");
+    //             setProducts(products.filter((product) => product._id !== productId));
+    //         } else {
+    //             alert("Xóa sản phẩm thất bại!");
+    //         }
+    //     } catch (error) {
+    //         console.error("Lỗi khi xóa sản phẩm:", error);
+    //         alert("Lỗi khi xóa sản phẩm!");
     //     }
-    //     fetchApi();
-    // }, []);
-    const handleDelete = async (productId) => {
-        if (!window.confirm("Bạn có chắc chắn muốn xóa sản phẩm này không?")) return;
-
-        try {
-            const response = await fetch(`http://localhost:5000/api/products/${productId}`, {
-                method: "DELETE",
-            });
-
-            if (response.ok) {
-                alert("Xóa sản phẩm thành công!");
-                setProducts(products.filter((product) => product._id !== productId));
-            } else {
-                alert("Xóa sản phẩm thất bại!");
-            }
-        } catch (error) {
-            console.error("Lỗi khi xóa sản phẩm:", error);
-            alert("Lỗi khi xóa sản phẩm!");
-        }
-    };
+    // };
     // console.log(products);
     return(
         <>
@@ -62,7 +51,7 @@ async function Products(){
                 </thead>
                 <tbody>
                     {productsSSR && productsSSR.length > 0 ? (
-                        productsSSR?.map((product, index) => (
+                        productsSSR?.map((product : any, index : any) => (
                             <tr key={product._id}>
                                 <td>{index + 1}</td>
                                 <td>
@@ -86,7 +75,7 @@ async function Products(){
                         ))
                     ) : (
                         <tr>
-                            <td colSpan="6" style={{ textAlign: "center" }}>Không có sản phẩm nào</td>
+                            <td colSpan={6} style={{ textAlign: "center" }}>Không có sản phẩm nào</td>
                         </tr>
                     )}
                 </tbody>

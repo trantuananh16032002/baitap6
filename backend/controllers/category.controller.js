@@ -2,15 +2,22 @@ const Category = require("../models/category.models");
 const fs = require("fs");
 const path = require("path");
 
-module.exports.index = async (req, res) =>{
+module.exports.index = async (req, res) => {
     try {
-        const categories = await Category.find(); 
+        let categories = await Category.find();
+
+        // Chuyển đổi parent_id từ chuỗi "null" thành null
+        categories = categories.map(cat => ({
+            ...cat._doc,
+            parent_id: cat.parent_id === "null" ? null : cat.parent_id
+        }));
+
         res.status(200).json(categories);
     } catch (error) {
         console.error("Lỗi khi lấy danh mục:", error);
         res.status(500).json({ message: "Lỗi server!" });
     }
-}
+};
 module.exports.create = async (req, res) =>{
     try {
         const { title, desc, parent_id, status } = req.body;

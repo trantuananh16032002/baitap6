@@ -5,8 +5,6 @@ import { useRouter, useParams } from "next/navigation";
 function EditProduct(){
     const router = useRouter();
     const { id } = useParams();
-    // console.log(`http://localhost:5000/api/products/${id}`);
-    const [reloadP, setReloadP] = useState(false);
     const [formData, setFormData] = useState({
         title: "",
         desc: "",
@@ -17,9 +15,6 @@ function EditProduct(){
         images: [],
     });
     const [categories, setCategories] = useState();
-    const handleReloadP = () =>{
-        setReloadP(!reloadP);
-    }
     useEffect(() => {
         const fetchCategories = async () => {
             try {
@@ -67,7 +62,7 @@ function EditProduct(){
         const files = Array.from(e.target.files);
         setFormData((prevData) => ({
             ...prevData,
-            images: [...prevData.images, ...files] // Giữ ảnh cũ, thêm ảnh mới
+            images: [...prevData.images, ...files] 
         }));
     };
     

@@ -9,7 +9,7 @@ function Account() {
         role: "",
         image: null
     });
-    const [account, SetAccount] = useState();
+    const [account, SetAccount] = useState<any>();
 
     useEffect(() => {
             const fetchAccount = async () => {
@@ -26,19 +26,27 @@ function Account() {
             };
             fetchAccount();
     }, []);
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value, type, files } = e.target;
-        setFormData((prev) => ({
-            ...prev,
-            [name]: type === "file" ? files[0] : value
-        }));
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+        const { name, value, type } = e.target;
+        if (type === "file" && e.target instanceof HTMLInputElement) {
+            const files = e.target.files;
+            setFormData((prev) => ({
+                ...prev,
+                [name]: files ? files[0] : null
+            }));
+        } else {
+            setFormData((prev) => ({
+                ...prev,
+                [name]: value
+            }));
+        }
     };
     const handleSetForm = () =>{
         setShowForm(!showForm);
     }
     // console.log(formData);
     console.log(account);
-    const handleSubmit = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const data = new FormData();
         data.append("username", formData.username);
@@ -78,7 +86,7 @@ function Account() {
                 </thead>
                 <tbody>
                     {account && account.length > 0 ? (
-                        account.map((acc, index) => (
+                        account.map((acc: { _id: string; username: string; role: string; avatar?: string }, index: number) => (
                             <tr key={acc._id}>
                                 <td>{index + 1}</td>
                                 <td>{acc.username}</td>
@@ -95,7 +103,7 @@ function Account() {
                         ))
                     ) : (
                         <tr>
-                            <td colSpan="5">Không có dữ liệu</td>
+                            <td colSpan={5}>Không có dữ liệu</td>
                         </tr>
                     )}
                 </tbody>
