@@ -5,11 +5,11 @@ import { useRouter } from "next/navigation";
 function Login() {
     const [formData, setFormData] = useState({ username: "", password: "" });
     const router = useRouter();
-    const handleChange = (e) => {
+    const handleChange = (e:any) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
     console.log(formData);
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e:any) => {
         e.preventDefault();
         try {
             const response = await fetch("http://localhost:5000/api/auth/login", {
