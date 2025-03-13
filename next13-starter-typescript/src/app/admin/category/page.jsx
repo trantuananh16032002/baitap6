@@ -18,7 +18,7 @@ function Category(){
         }
         fetchCategories();
     }, [reload]);
-    // console.log(category);
+    console.log(category);
     const handleDelete = async (id) => {
         const confirmDelete = window.confirm("Bạn có chắc muốn xóa danh mục này?");
         if (!confirmDelete) return;

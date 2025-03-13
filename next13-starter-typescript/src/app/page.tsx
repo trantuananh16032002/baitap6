@@ -87,9 +87,9 @@ export default async function Home() {
             </div>
                 
 
-                <div className="products__button">
+                <Link href={"/product/listproduct"} className="products__button">
                     <button>View All</button>
-                </div>
+                </Link>
             </div>
         </div>
           

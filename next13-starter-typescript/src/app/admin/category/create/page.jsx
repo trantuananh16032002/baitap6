@@ -39,7 +39,7 @@ function CreateCategory(){
           [name]: type === "file" ? files[0] : value, // Xử lý file upload
         }));
     };
-    // console.log(formData);
+    console.log(formData);
     // console.log(categories);
     const handleSubmit = async (e) => {
         e.preventDefault();

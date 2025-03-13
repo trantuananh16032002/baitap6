@@ -17,11 +17,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
     useEffect(() => {
         const fetchProfile = async () => {
-            if (!document.cookie.includes("token=")) {
-                console.log("Chưa có token, không gọi API");
-                router.push("/login");
-                return;
-            }
             try {
                 const response = await fetch("http://localhost:5000/api/auth/profile", { credentials: "include" });
                 if (!response.ok) {
