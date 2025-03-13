@@ -1,10 +1,16 @@
 const mongoose = require("mongoose");
 
-module.exports.connect = async () =>{
-    try{
-        await mongoose.connect(process.env.MONGO_URI);
-        console.log("connect success");
-    }catch(error){
-        console.log("connect error");
+const connect = async () => {
+    try {
+        await mongoose.connect(process.env.MONGO_URI, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+        });
+        console.log("✅ MongoDB Atlas connected successfully");
+    } catch (error) {
+        console.error("❌ MongoDB connection error:", error.message);
+        process.exit(1);
     }
-}
+};
+
+module.exports = { connect };

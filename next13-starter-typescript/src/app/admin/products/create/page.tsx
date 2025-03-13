@@ -99,7 +99,7 @@ function CreateCategory() {
                 status: "active",
                 images: [],
             });
-            router.push("/admin/products");
+            router.replace("/admin/products");
         } catch (error) {
             console.error("Lỗi gửi dữ liệu:", error);
         }

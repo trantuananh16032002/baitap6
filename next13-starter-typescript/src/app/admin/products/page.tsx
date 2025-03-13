@@ -10,6 +10,7 @@ async function fetchProducts() {
 }
 async function Products(){
     const productsSSR = await fetchProducts();
+    // const router = useRouter();
     console.log(productsSSR);
     // const handleDelete = async (productId) => {
     //     if (!window.confirm("Bạn có chắc chắn muốn xóa sản phẩm này không?")) return;
