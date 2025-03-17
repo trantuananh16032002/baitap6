@@ -1,8 +1,8 @@
-import { PUBLIC_DOMAIN } from "@/utils/requests";
+import { APT_DOMAIN, PUBLIC_DOMAIN } from "@/utils/requests";
 
 export const getProductById = async (id:any) => {
     try {
-      const res = await fetch(`${PUBLIC_DOMAIN}/api/products/${id}`, { cache: "no-store" }); 
+      const res = await fetch(`${APT_DOMAIN}products/${id}`, { cache: "no-store" }); 
       if (!res.ok) {
         throw new Error(`Không thể lấy sản phẩm: ${res.status} ${res.statusText}`);
       }

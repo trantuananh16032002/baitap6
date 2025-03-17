@@ -1,8 +1,8 @@
-import { PUBLIC_DOMAIN } from "@/utils/requests";
+import { APT_DOMAIN, PUBLIC_DOMAIN } from "@/utils/requests";
 
 export async function getProfile() {
     try {
-        const res = await fetch(`${PUBLIC_DOMAIN}/api/auth/profile`, {
+        const res = await fetch(`${APT_DOMAIN}auth/profile`, {
             cache: "no-store",
             credentials: "include",
         });

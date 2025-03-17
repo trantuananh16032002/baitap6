@@ -1,8 +1,8 @@
-import { PUBLIC_DOMAIN } from "@/utils/requests";
+import { APT_DOMAIN, PUBLIC_DOMAIN } from "@/utils/requests";
 
 export const getProducts = async () => {
   try {
-    const res = await fetch(`${PUBLIC_DOMAIN}/api/products`, { cache: "no-store" });
+    const res = await fetch(`${APT_DOMAIN}products`, { cache: "no-store" });
     if (!res.ok) {
       throw new Error("Failed to fetch");
     }
