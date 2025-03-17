@@ -2,14 +2,15 @@
 
 import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
+import { getCategories, getCategoryByID, patchCategory } from "@/services/categorySercivves";
 
 function EditCategory(){
     const router = useRouter();
     const { id } = useParams();
     console.log(id);
-    const [imagePreview, setImagePreview] = useState(null);
-    const [categories, setCategories] = useState();
-    const [formData, setFormData] = useState({
+    const [imagePreview, setImagePreview] = useState<any>(null);
+    const [categories, setCategories] = useState<any>([]);
+    const [formData, setFormData] = useState<any>({
         title: "",
         desc: "",
         parent_id: "",
@@ -23,19 +24,21 @@ function EditCategory(){
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                const res = await fetch("http://localhost:5000/api/category");
-                if (!res.ok) {
-                    throw new Error(`Lỗi API: ${res.status}`);
-                }
-                const data = await res.json();
-                setCategories(formatCategories(data));
+                // const res = await fetch("http://localhost:5000/api/category");
+                // if (!res.ok) {
+                //     throw new Error(`Lỗi API: ${res.status}`);
+                // }
+                // const data = await res.json();
+                const result =await getCategories();
+                setCategories(formatCategories(result));
             } catch (err) {
                 console.error("Lỗi khi lấy danh mục:", err);
             }
         };
         const fetchCategoryByID = async () =>{
-            const response = await fetch(`http://localhost:5000/api/category/${id}`);
-            const data = await response.json();
+            // const response = await fetch(`http://localhost:5000/api/category/${id}`);
+            // const data = await response.json();
+            const data = await getCategoryByID(id);
             setFormData(data);
             if (data.thumbnail) {
                 setImagePreview(`http://localhost:5000/${data.thumbnail}`);
@@ -46,70 +49,77 @@ function EditCategory(){
     }, []);
 
     console.log(formData);
-    const handleChange = (e) => {
+    const handleChange = (e:any) => {
         const { name, value, type, files } = e.target;
         if (type === "file" && files.length > 0) {
             const file = files[0];
-            setFormData((prev) => ({
+            setFormData((prev:any) => ({
                 ...prev,
                 thumbnail: file,
             }));
             setImagePreview(URL.createObjectURL(file));
         } else {
-            setFormData((prev) => ({
+            setFormData((prev:any) => ({
                 ...prev,
                 [name]: value,
             }));
         }
     };
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e:any) => {
         e.preventDefault();
         try {
             let bodyData;
             let headers = {};
     
-            if (formData.thumbnail instanceof File) {
-                bodyData = new FormData();
-                bodyData.append("title", formData.title);
-                bodyData.append("desc", formData.desc);
-                bodyData.append("parent_id", formData.parent_id);
-                bodyData.append("status", formData.status);
-                bodyData.append("thumbnail", formData.thumbnail);
-            } else {
-                // Nếu không có ảnh mới, gửi JSON
-                bodyData = JSON.stringify({
-                    title: formData.title,
-                    desc: formData.desc,
-                    parent_id: formData.parent_id,
-                    status: formData.status,
-                });
-                headers["Content-Type"] = "application/json";
+            // if (formData.thumbnail instanceof File) {
+            //     bodyData = new FormData();
+            //     bodyData.append("title", formData.title);
+            //     bodyData.append("desc", formData.desc);
+            //     bodyData.append("parent_id", formData.parent_id);
+            //     bodyData.append("status", formData.status);
+            //     bodyData.append("thumbnail", formData.thumbnail);
+            // }
+            bodyData = new FormData();
+            bodyData.append("title", formData.title);
+            bodyData.append("desc", formData.desc);
+            bodyData.append("parent_id", formData.parent_id);
+            bodyData.append("status", formData.status);
+            bodyData.append("thumbnail", formData.thumbnail);
+            // else {
+            //     // Nếu không có ảnh mới, gửi JSON
+            //     bodyData = JSON.stringify({
+            //         title: formData.title,
+            //         desc: formData.desc,
+            //         parent_id: formData.parent_id,
+            //         status: formData.status,
+            //     });
+            //     headers["Content-Type"] = "application/json";
+            // }
+    
+            // const response = await fetch(`http://localhost:5000/api/category/${id}`, {
+            //     method: "PATCH",
+            //     body: bodyData,
+            //     headers,
+            // });
+            // if (!response.ok) {
+            //     throw new Error(`Lỗi cập nhật: ${response.status}`);
+            // }
+            const result = await patchCategory(bodyData, id);
+            if(result){
+                alert("Cập nhật danh mục thành công!");
+                router.push("/admin/category");
             }
-    
-            const response = await fetch(`http://localhost:5000/api/category/${id}`, {
-                method: "PATCH",
-                body: bodyData,
-                headers,
-            });
-    
-            if (!response.ok) {
-                throw new Error(`Lỗi cập nhật: ${response.status}`);
-            }
-    
-            alert("Cập nhật danh mục thành công!");
-            router.push("/admin/category");
         } catch (error) {
             console.error("Lỗi khi cập nhật danh mục:", error);
             alert("Có lỗi xảy ra khi cập nhật danh mục.");
         }
     };
     
-    const formatCategories = (categories, parentId = null) => { 
-        let nestedCategories = [];
-    
+    const formatCategories = (categories:any, parentId:any = null) => { 
+        let nestedCategories:any[] = [];
         categories
-            .filter((cat) => cat.parent_id === parentId) 
-            .forEach((cat) => {
+            .filter((cat:any) => cat.parent_id === parentId) 
+            .forEach((cat:any) => {
                 nestedCategories.push({ ...cat, label: cat.title });
                 const subCategories = formatCategories(categories, cat._id); 
                 subCategories.forEach((sub) => {
@@ -120,7 +130,7 @@ function EditCategory(){
         return nestedCategories;
     };
     
-    const handleBack = (e) => {
+    const handleBack = (e:any) => {
         e.preventDefault();
         router.back();
     };
@@ -147,7 +157,7 @@ function EditCategory(){
                     </label>
                     <select name="parent_id" className="form--add__item--input" onChange={handleChange} value={formData.parent_id}>
                         <option value="">Chọn danh mục cha</option>
-                        {categories?.map((category) => (
+                        {categories?.map((category:any) => (
                             <option key={category._id} value={category._id}>
                                 {category.label}
                             </option>

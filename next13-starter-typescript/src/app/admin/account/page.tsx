@@ -1,8 +1,11 @@
 "use client";
+import { getAccounts, postAccounts } from "@/services/accountServices";
+import { PUBLIC_DOMAIN } from "@/utils/requests";
 import { useEffect, useState } from "react";
 
 function Account() {
     const [showForm, setShowForm] = useState(false);
+    const [reload, setReload] = useState(false);
     const [formData, setFormData] = useState({
         username: "",
         password: "",
@@ -13,19 +16,21 @@ function Account() {
 
     useEffect(() => {
             const fetchAccount = async () => {
-                try {
-                    const response = await fetch("http://localhost:5000/api/accounts");
-                    if (!response.ok) {
-                        throw new Error("Unauthorized");
-                    }
-                    const data= await response.json();
-                    SetAccount(data.data);
-                } catch (error) {
-                    console.error("Lỗi khi gọi API:", error);
-                }
+                // try {
+                //     const response = await fetch("http://localhost:5000/api/accounts");
+                //     if (!response.ok) {
+                //         throw new Error("Unauthorized");
+                //     }
+                //     const data= await response.json();
+                //     SetAccount(data.data);
+                // } catch (error) {
+                //     console.error("Lỗi khi gọi API:", error);
+                // }
+                const data = await getAccounts();
+                SetAccount(data.data);
             };
             fetchAccount();
-    }, []);
+    }, [reload]);
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value, type } = e.target;
         if (type === "file" && e.target instanceof HTMLInputElement) {
@@ -57,13 +62,15 @@ function Account() {
         }
 
         try {
-            const response = await fetch("http://localhost:5000/api/accounts", {
-                method: "POST",
-                body: data
-            });
-            const result = await response.json();
+            // const response = await fetch("http://localhost:5000/api/accounts", {
+            //     method: "POST",
+            //     body: data
+            // });
+            // const result = await response.json();
+            const post = await postAccounts(data);
+            setReload(!reload);
             handleSetForm();
-            console.log("Kết quả:", result);
+            console.log("Kết quả:", post);
         } catch (error) {
             console.error("Lỗi gửi dữ liệu:", error);
         }
@@ -92,7 +99,7 @@ function Account() {
                                 <td>{acc.username}</td>
                                 <td>{acc.role === "admin" ? "Quản trị viên" : "Quản lý nội dung"}</td>
                                 <td>
-                                    <img src={acc?.avatar ? `http://localhost:5000${acc.avatar}` : "/img/user.svg"} 
+                                    <img src={acc?.avatar ? `${PUBLIC_DOMAIN}${acc.avatar}` : "/img/user.svg"} 
                                         alt="Avatar" width="40" height="40" style={{ borderRadius: "50%" }} />
                                 </td>
                                 <td>

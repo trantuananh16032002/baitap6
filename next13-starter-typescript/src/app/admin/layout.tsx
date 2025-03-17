@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
+import { APT_DOMAIN, PUBLIC_DOMAIN } from "@/utils/requests";
 
 type ProfileType = {
     username: string;
@@ -18,7 +19,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     useEffect(() => {
         const fetchProfile = async () => {
             try {
-                const response = await fetch("http://localhost:5000/api/auth/profile", { credentials: "include" });
+                const response = await fetch(`${APT_DOMAIN}auth/profile`, { credentials: "include" });
                 if (!response.ok) {
                     throw new Error("Unauthorized");
                 }
@@ -63,7 +64,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                     </div>
                     <img 
                         className="maincontent__header--users"
-                        src={profile?.avatar ? `http://localhost:5000${profile.avatar}` : "/img/user.svg"}
+                        src={profile?.avatar ? `${PUBLIC_DOMAIN}${profile.avatar}` : "/img/user.svg"}
                         alt="Avatar"
                     />
                 </div>

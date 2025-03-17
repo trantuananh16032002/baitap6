@@ -1,7 +1,11 @@
 import Footer from "@/components/Footer/page"
 import Header from "@/components/Header/page"
-
-function ProductDetail(){
+import { getProductById } from "@/lib/getProductByID";
+import ProductAction from "../ProductAction";
+import { PUBLIC_DOMAIN } from "@/utils/requests";
+async function ProductDetail({ params }:any){
+    const productID = await getProductById(params.id)
+    // console.log(product);
     return(
         <>
             <Header></Header>
@@ -30,13 +34,15 @@ function ProductDetail(){
                             </div>
                         </div>
                         <div className="detailProduct__img--big">
-                            <img src="/img/prd2.svg" alt=""/>
+                            <img
+                                src={productID.images.length > 0 ? `${PUBLIC_DOMAIN}${productID.images[0]}` : "/img/prd2.svg"}
+                            />
                         </div>
                     </div>
 
                     <div className="detailProduct__info">
                         <div className="detailProduct__info--detail">
-                            <div className="detailProduct__info--detail__title">One Life Graphic T-shirt</div>
+                            <div className="detailProduct__info--detail__title">{productID.title}</div>
                             <div className="detailProduct__info--detail__rate">
                                 <div className="detailProduct__info--detail__rate--star">
                                     <img src="/img/star.svg" alt=""/>
@@ -45,18 +51,18 @@ function ProductDetail(){
                                     <img src="/img/star.svg" alt=""/>
                                     <img src="/img/star.svg" alt=""/>
                                 </div>
-                                <span class="detailProduct__info--detail__rate--point">4.5/5</span>
+                                <span className="detailProduct__info--detail__rate--point">4.5/5</span>
                             </div>
                             <div className="detailProduct__info--detail__price">
-                                <span>$260</span>
+                                <span>${productID.price}</span>
                             </div>
                             <div className="detailProduct__info--detail__info">
-                                <span>This graphic t-shirt which is perfect for any occasion. Crafted from a soft and breathable fabric, it offers superior comfort and style.</span>
+                                <span>{productID.desc}</span>
                             </div>
                             <div className="line"></div>
                         </div>
                         
-                        <div className="detailProduct__info--action">
+                        {/* <div className="detailProduct__info--action">
                             <div className="detailProduct__info--action__number">
                                 <button><img src="/img/tru.svg" alt=""/></button>
                                 <span>1</span>
@@ -65,7 +71,8 @@ function ProductDetail(){
                             <button className="detailProduct__info--action__add">
                                 Add to Cart
                             </button>
-                        </div>
+                        </div> */}
+                        <ProductAction product={productID} />
                     </div>
                 </div>
             </div>

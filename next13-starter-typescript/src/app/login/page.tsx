@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { APT_DOMAIN } from "@/utils/requests";
 
 function Login() {
     const [formData, setFormData] = useState({ username: "", password: "" });
@@ -12,7 +13,7 @@ function Login() {
     const handleSubmit = async (e:any) => {
         e.preventDefault();
         try {
-            const response = await fetch("http://localhost:5000/api/auth/login", {
+            const response = await fetch(`${APT_DOMAIN}auth/login`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 credentials: "include",

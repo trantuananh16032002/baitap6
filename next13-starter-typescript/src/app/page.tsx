@@ -3,6 +3,7 @@
 import Footer from "@/components/Footer/page";
 import Header from "@/components/Header/page";
 import { getProducts } from "@/lib/getProducts";
+import { PUBLIC_DOMAIN } from "@/utils/requests";
 import { motion } from "framer-motion";
 import Link from "next/link";
 export default async function Home() {
@@ -64,7 +65,7 @@ export default async function Home() {
                         <div key={product._id} className=" products__slide--item">
                             <img
                                 className="products__slide--item__img"
-                                src={product.images.length > 0 ? `http://localhost:5000${product.images[0]}` : "/img/default.jpg"}
+                                src={product.images.length > 0 ? `${PUBLIC_DOMAIN}${product.images[0]}` : "/img/default.jpg"}
                                 alt={product.title}
                             />
                             <p className="products__slide--item__title">{product.title}</p>
@@ -79,14 +80,13 @@ export default async function Home() {
                                 <div className="products__slide--item__rate--point">4.5/5</div>
                             </div>
                             <div className="products__slide--item__price">
-                                <span className="products__slide--item__price--new">{product.price}.VND</span>
+                                <span className="products__slide--item__price--new">{product.price}$</span>
                             </div>
                         </div>
                     </Link> 
                 ))}
             </div>
                 
-
                 <Link href={"/product/listproduct"} className="products__button">
                     <button>View All</button>
                 </Link>

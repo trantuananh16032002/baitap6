@@ -2,10 +2,13 @@
 
 import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
+import { getCategories } from "@/services/categorySercivves";
+import { getProductByID, patchProduct } from "@/services/productServices";
+import { PUBLIC_DOMAIN } from "@/utils/requests";
 function EditProduct(){
     const router = useRouter();
     const { id } = useParams();
-    const [formData, setFormData] = useState({
+    const [formData, setFormData] = useState<any>({
         title: "",
         desc: "",
         price: "",
@@ -14,37 +17,39 @@ function EditProduct(){
         status: "active",
         images: [],
     });
-    const [categories, setCategories] = useState();
+    const [categories, setCategories] = useState<any>();
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                const res = await fetch("http://localhost:5000/api/category");
-                if (!res.ok) {
-                    throw new Error(`Lỗi API: ${res.status}`);
-                }
-                const data = await res.json();
+                // const res = await fetch("http://localhost:5000/api/category");
+                // if (!res.ok) {
+                //     throw new Error(`Lỗi API: ${res.status}`);
+                // }
+                // const data = await res.json();
+                const data = await getCategories();
                 setCategories(formatCategories(data));
             } catch (err) {
                 console.error("Lỗi khi lấy danh mục:", err);
             }
         };
         const fetchProductsID = async () =>{
-            const response = await fetch(`http://localhost:5000/api/products/${id}`);
-            const data = await response.json();
+            // const response = await fetch(`http://localhost:5000/api/products/${id}`);
+            // const data = await response.json();
+            const data = await getProductByID(id);
             console.log(data);
             setFormData(data);
         }
         fetchProductsID();
         fetchCategories();
     }, []);
-    const formatCategories = (categories, parentId = null) => { 
-        let nestedCategories = [];
+    const formatCategories = (categories :any, parentId:any = null) => { 
+        let nestedCategories:any = [];
         categories
-            .filter((cat) => cat.parent_id === parentId) 
-            .forEach((cat) => {
+            .filter((cat:any) => cat.parent_id === parentId) 
+            .forEach((cat:any) => {
                 nestedCategories.push({ ...cat, label: cat.title });
                 const subCategories = formatCategories(categories, cat._id); 
-                subCategories.forEach((sub) => {
+                subCategories.forEach((sub:any) => {
                     nestedCategories.push({ ...sub, label: `-- ${sub.label} --` });
                 });
             });
@@ -53,25 +58,25 @@ function EditProduct(){
     };
 
     console.log(formData);
-    const handleChange = (e) => {
+    const handleChange = (e:any) => {
         const { name, value } = e.target;
-        setFormData(prev => ({ ...prev, [name]: value }));
+        setFormData((prev:any) => ({ ...prev, [name]: value }));
     };
 
-    const handleImageChange = (e) => {
+    const handleImageChange = (e:any) => {
         const files = Array.from(e.target.files);
-        setFormData((prevData) => ({
+        setFormData((prevData:any) => ({
             ...prevData,
             images: [...prevData.images, ...files] 
         }));
     };
     
 
-    const handleRemoveImage = (index) => {
-        setFormData(prev => ({ ...prev, images: prev.images.filter((_, i) => i !== index) }));
+    const handleRemoveImage = (index:any) => {
+        setFormData((prev:any) => ({ ...prev, images: prev.images.filter((_:any, i:any) => i !== index) }));
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e:any) => {
         e.preventDefault();
     
         const formDataToSend = new FormData();
@@ -83,27 +88,28 @@ function EditProduct(){
         formDataToSend.append("status", formData.status);
     
         // Phân loại ảnh cũ (đường dẫn) và ảnh mới (File)
-        const existingImages = formData.images.filter(image => typeof image === "string");
-        const newImages = formData.images.filter(image => image instanceof File);
+        const existingImages = formData.images.filter((image:any) => typeof image === "string");
+        const newImages = formData.images.filter((image:any) => image instanceof File);
     
         // Gửi danh sách ảnh cũ lên server
         formDataToSend.append("existingImages", JSON.stringify(existingImages));
     
         // Gửi ảnh mới lên server
-        newImages.forEach(image => {
+        newImages.forEach((image:any) => {
             formDataToSend.append("images", image);
         });
         try {
-            const res = await fetch(`http://localhost:5000/api/products/${id}`, {
-                method: "PATCH", 
-                body: formDataToSend,
-            });
-    
-            if (!res.ok) throw new Error("Lỗi khi cập nhật sản phẩm");
-    
-            alert("Cập nhật sản phẩm thành công!");
-            router.refresh();
-            router.push("/admin/products"); 
+            // const res = await fetch(`http://localhost:5000/api/products/${id}`, {
+            //     method: "PATCH", 
+            //     body: formDataToSend,
+            // });
+            // if (!res.ok) throw new Error("Lỗi khi cập nhật sản phẩm");
+            const result = await patchProduct(formDataToSend,id);
+            if(result){
+                alert("Cập nhật sản phẩm thành công!");
+                router.refresh();
+                router.push("/admin/products");
+            }
         } catch (error) {
             console.error("Lỗi cập nhật dữ liệu:", error);
         }
@@ -135,7 +141,7 @@ function EditProduct(){
                     <label className="form--add__item--label">Danh mục</label>
                     <select name="category_id" value={formData.category_id} onChange={handleChange} className="form--add__item--input">
                         <option value="">Chọn danh mục</option>
-                        {categories?.map(cat => (
+                        {categories?.map((cat:any) => (
                             <option key={cat._id} value={cat._id}>{cat.label}</option>
                         ))}
                     </select>
@@ -145,10 +151,10 @@ function EditProduct(){
                     <input type="file" multiple onChange={handleImageChange} accept="image/*" className="form--add__item--input form--add__item--input--file" />
                 </div>
                 <div className="image-preview">
-                    {formData.images.map((image, index) => (
+                    {formData.images.map((image:any, index:any) => (
                         <div key={index} className="image-preview__item">
                             <img 
-                                src={image instanceof File ? URL.createObjectURL(image) : `http://localhost:5000${image}`} 
+                                src={image instanceof File ? URL.createObjectURL(image) : `${PUBLIC_DOMAIN}${image}`} 
                                 alt={`Ảnh ${index + 1}`} 
                                 className="image-preview__img" 
                             />

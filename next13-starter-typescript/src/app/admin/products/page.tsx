@@ -3,10 +3,14 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import DeleteButton from "./Delete";
+import { getProducts } from "@/services/productServices";
+import { PUBLIC_DOMAIN } from "@/utils/requests";
 async function fetchProducts() {
-    const res = await fetch("http://localhost:5000/api/products", { cache: "no-store" }); 
-    if (!res.ok) throw new Error("Không thể lấy dữ liệu sản phẩm");
-    return res.json();
+    // const res = await fetch("http://localhost:5000/api/products", { cache: "no-store" }); 
+    // if (!res.ok) throw new Error("Không thể lấy dữ liệu sản phẩm");
+    // return res.json();
+    const result = await getProducts();
+    return result;
 }
 async function Products(){
     const productsSSR = await fetchProducts();
@@ -57,7 +61,7 @@ async function Products(){
                                 <td>{index + 1}</td>
                                 <td>
                                     {product.images.length > 0 ? (
-                                        <img src={`http://localhost:5000${product.images[0]}`} alt={product.title} width={50} height={50} />
+                                        <img src={`${PUBLIC_DOMAIN}${product.images[0]}`} alt={product.title} width={50} height={50} />
                                     ) : (
                                         <img src="/uploads/default.jpg" alt="No Image" width={50} height={50} />
                                     )}

@@ -1,7 +1,11 @@
 "use client";
 
+import { getCategories } from "@/services/categorySercivves";
+import { postProducts } from "@/services/productServices";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function CreateCategory() {
     const [reloadP, setReloadP] = useState(false);
@@ -14,8 +18,8 @@ function CreateCategory() {
         status: "active",
         images: [],
     });
-    const router = useRouter();
     
+    const router = useRouter();
     const [categories, setCategories] = useState<any[]>([]);
     const handleReloadP = () =>{
         setReloadP(!reloadP);
@@ -23,11 +27,12 @@ function CreateCategory() {
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                const res = await fetch("http://localhost:5000/api/category");
-                if (!res.ok) {
-                    throw new Error(`Lỗi API: ${res.status}`);
-                }
-                const data = await res.json();
+                // const res = await fetch("http://localhost:5000/api/category");
+                // if (!res.ok) {
+                //     throw new Error(`Lỗi API: ${res.status}`);
+                // }
+                // const data = await res.json();
+                const data = await getCategories();
                 setCategories(formatCategories(data));
             } catch (err) {
                 console.error("Lỗi khi lấy danh mục:", err);
@@ -82,13 +87,13 @@ function CreateCategory() {
         });
         // console.log(formDataToSend);
         try {
-            const res = await fetch("http://localhost:5000/api/products", {
-                method: "POST",
-                body: formDataToSend,
-            });
+            // const res = await fetch("http://localhost:5000/api/products", {
+            //     method: "POST",
+            //     body: formDataToSend,
+            // });
 
-            if (!res.ok) throw new Error("Lỗi khi gửi sản phẩm");
-
+            // if (!res.ok) throw new Error("Lỗi khi gửi sản phẩm");
+            const result = await postProducts(formDataToSend);
             alert("Thêm danh mục thành công!");
             setFormData({
                 title: "",
@@ -99,6 +104,7 @@ function CreateCategory() {
                 status: "active",
                 images: [],
             });
+            router.refresh();
             router.replace("/admin/products");
         } catch (error) {
             console.error("Lỗi gửi dữ liệu:", error);
@@ -106,7 +112,7 @@ function CreateCategory() {
     };
     
     return (
-        <>
+        <>  
             <h2 style={{ fontSize: "2rem", fontWeight: "600", marginBottom: "40px" }}>Thêm sản phẩm</h2>
             <form className="form--add" onSubmit={handleSubmit}>
                 <div className="form--add__item">

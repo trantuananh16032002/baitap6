@@ -1,9 +1,10 @@
 "use client";
 
+import { getCategories, postCategory } from "@/services/categorySercivves";
 import { useEffect, useState } from "react";
 
 function CreateCategory(){
-    const [categories, setCategories] = useState();
+    const [categories, setCategories] = useState<any[]>([]);
     const [formData, setFormData] = useState({
         title: "",
         desc: "",
@@ -18,12 +19,13 @@ function CreateCategory(){
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                const res = await fetch("http://localhost:5000/api/category");
-                if (!res.ok) {
-                    throw new Error(`Lỗi API: ${res.status}`);
-                }
-                const data = await res.json();
-                console.log(data);
+                // const res = await fetch("http://localhost:5000/api/category");
+                // if (!res.ok) {
+                //     throw new Error(`Lỗi API: ${res.status}`);
+                // }
+                // const data = await res.json();
+                // console.log(data);
+                const data = await getCategories();
                 setCategories(formatCategories(data));
             } catch (err) {
                 console.error("Lỗi khi lấy danh mục:", err);
@@ -32,7 +34,7 @@ function CreateCategory(){
         fetchCategories();
     }, [reloadP]);
     
-    const handleChange = (e) => {
+    const handleChange = (e:any) => {
         const { name, value, type, files } = e.target;
         setFormData((prev) => ({
           ...prev,
@@ -41,7 +43,7 @@ function CreateCategory(){
     };
     console.log(formData);
     // console.log(categories);
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e:any) => {
         e.preventDefault();
         try {
           const formDataToSend = new FormData();
@@ -53,16 +55,17 @@ function CreateCategory(){
             formDataToSend.append("thumbnail", formData.thumbnail);
           }
     
-          const response = await fetch("http://localhost:5000/api/category", {
-            method: "POST",
-            body: formDataToSend,
-          });
+        //   const response = await fetch("http://localhost:5000/api/category", {
+        //     method: "POST",
+        //     body: formDataToSend,
+        //   });
     
-          const result = await response.json();
+        //   const result = await response.json();
     
-          if (!response.ok) {
-            throw new Error(result.message || "Lỗi khi thêm danh mục");
-          }
+        //   if (!response.ok) {
+        //     throw new Error(result.message || "Lỗi khi thêm danh mục");
+        //   }
+        const result = await postCategory(formDataToSend);
     
           alert("Thêm danh mục thành công!");
           setFormData({
@@ -77,15 +80,15 @@ function CreateCategory(){
         }
     };
     
-    const formatCategories = (categories, parentId = null) => { 
-        let nestedCategories = [];
+    const formatCategories = (categories:any, parentId:any = null) => { 
+        let nestedCategories:any = [];
     
         categories
-            .filter((cat) => cat.parent_id === parentId) 
-            .forEach((cat) => {
+            .filter((cat:any) => cat.parent_id === parentId) 
+            .forEach((cat:any) => {
                 nestedCategories.push({ ...cat, label: cat.title });
                 const subCategories = formatCategories(categories, cat._id); 
-                subCategories.forEach((sub) => {
+                subCategories.forEach((sub:any) => {
                     nestedCategories.push({ ...sub, label: `-- ${sub.label} --` });
                 });
             });
@@ -115,7 +118,7 @@ function CreateCategory(){
                     </label>
                     <select name="parent_id" className="form--add__item--input" onChange={handleChange} value={formData.parent_id}>
                         <option value="">Chọn danh mục cha</option>
-                        {categories?.map((category) => (
+                        {categories?.map((category:any) => (
                             <option key={category._id} value={category._id}>
                                 {category.label}
                             </option>
@@ -146,7 +149,7 @@ function CreateCategory(){
                 </div>
                 <div className="form--add__action">
                     <button type="submit" className="form--add__action--button">Thêm</button>
-                    <button className="form--add__action--button">Quay lại</button>
+                    {/* <button className="form--add__action--button">Quay lại</button> */}
                 </div>
             </form>
         </>

@@ -1,4 +1,5 @@
 "use client";
+import { deleteProduct } from "@/services/productServices";
 import { useRouter } from "next/navigation";
 
 export default function DeleteButton({ productId }: { productId: string }) {
@@ -8,11 +9,11 @@ export default function DeleteButton({ productId }: { productId: string }) {
         if (!window.confirm("Bạn có chắc chắn muốn xóa sản phẩm này không?")) return;
 
         try {
-            const response = await fetch(`http://localhost:5000/api/products/${productId}`, {
-                method: "DELETE",
-            });
-
-            if (response.ok) {
+            // const response = await fetch(`http://localhost:5000/api/products/${productId}`, {
+            //     method: "DELETE",
+            // });
+            const result = await deleteProduct(productId);
+            if (result) {
                 alert("Xóa sản phẩm thành công!");
                 router.refresh(); // Làm mới trang sau khi xóa
             } else {

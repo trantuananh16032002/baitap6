@@ -1,6 +1,8 @@
+import { PUBLIC_DOMAIN } from "@/utils/requests";
+
 export async function getProfile() {
     try {
-        const res = await fetch("http://localhost:5000/api/auth/profile", {
+        const res = await fetch(`${PUBLIC_DOMAIN}/api/auth/profile`, {
             cache: "no-store",
             credentials: "include",
         });
