@@ -13,7 +13,7 @@ const database = require("./config/database");
 app.use("/uploads", express.static("uploads"));
 app.use(cookieParser());
 app.use(cors({
-  origin: "http://localhost:3000", 
+  origin: "http://45.32.116.67", 
   credentials: true, 
 }));
 database.connect();
