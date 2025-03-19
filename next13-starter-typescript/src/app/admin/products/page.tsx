@@ -1,41 +1,30 @@
-// "use client";
-import { useRouter } from "next/navigation";
+"use client";
 import Link from "next/link";
-import { useEffect, useState } from "react";
 import DeleteButton from "./Delete";
 import { getProducts } from "@/services/productServices";
 import { PUBLIC_DOMAIN } from "@/utils/requests";
-async function fetchProducts() {
-    // const res = await fetch("http://localhost:5000/api/products", { cache: "no-store" }); 
-    // if (!res.ok) throw new Error("Không thể lấy dữ liệu sản phẩm");
-    // return res.json();
-    const result = await getProducts();
-    return result;
-}
-async function Products(){
-    const productsSSR = await fetchProducts();
-    // const router = useRouter();
-    console.log(productsSSR);
-    // const handleDelete = async (productId) => {
-    //     if (!window.confirm("Bạn có chắc chắn muốn xóa sản phẩm này không?")) return;
+import { useState, useEffect } from "react";
+import Pagination from "@/components/Pagination/PaginationAdmin";
 
-    //     try {
-    //         const response = await fetch(`http://localhost:5000/api/products/${productId}`, {
-    //             method: "DELETE",
-    //         });
-
-    //         if (response.ok) {
-    //             alert("Xóa sản phẩm thành công!");
-    //             setProducts(products.filter((product) => product._id !== productId));
-    //         } else {
-    //             alert("Xóa sản phẩm thất bại!");
-    //         }
-    //     } catch (error) {
-    //         console.error("Lỗi khi xóa sản phẩm:", error);
-    //         alert("Lỗi khi xóa sản phẩm!");
-    //     }
-    // };
-    // console.log(products);
+function Products(){
+    const [products, setProducts] = useState<any[]>([]);
+    const [page, setPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const limit = 5; 
+    const [reload, setReload] = useState(false);
+    const handleReload = () =>{
+        setReload(!reload);
+    }
+    useEffect(() => {
+        async function fetchProducts() {
+            const result = await getProducts(page, limit, undefined,undefined,undefined, undefined);
+            if (result) {
+                setProducts(result.products); 
+                setTotalPages(result.totalPages);
+            }
+        }
+        fetchProducts();
+    }, [page,reload]); 
     return(
         <>
             <div className="content__action">
@@ -55,8 +44,8 @@ async function Products(){
                     </tr>
                 </thead>
                 <tbody>
-                    {productsSSR && productsSSR.length > 0 ? (
-                        productsSSR?.map((product : any, index : any) => (
+                    {products && products.length > 0 ? (
+                        products?.map((product : any, index : any) => (
                             <tr key={product._id}>
                                 <td>{index + 1}</td>
                                 <td>
@@ -73,8 +62,7 @@ async function Products(){
                                     <Link href={`/admin/products/${product._id}`}>
                                         <button className="table-main--button">Sửa</button>
                                     </Link>
-                                    {/* <button className="table-main--button" onClick={() => handleDelete(product._id)}>Xóa</button> */}
-                                    <DeleteButton productId={product._id}/>
+                                    <DeleteButton productId={product._id} reload = {handleReload}/>
                                 </td>
                             </tr>
                         ))
@@ -85,6 +73,25 @@ async function Products(){
                     )}
                 </tbody>
             </table>
+            {/* Phân trang */}
+            {/* <div className="pagination">
+                <button
+                    disabled={page === 1}
+                    onClick={() => setPage(page - 1)}
+                >
+                    ← Trang trước
+                </button>
+
+                <span>Trang {page} / {totalPages}</span>
+
+                <button
+                    disabled={page === totalPages}
+                    onClick={() => setPage(page + 1)}
+                >
+                    Trang sau →
+                </button>
+            </div> */}
+            <Pagination page={page} totalPages={totalPages} setPage={setPage} />
         </>
     )
 }

@@ -1,5 +1,6 @@
 "use client";
 
+import Pagination from "@/components/Pagination/PaginationAdmin";
 import { deleteCategory, getCategories } from "@/services/categorySercivves";
 import { PUBLIC_DOMAIN } from "@/utils/requests";
 import Link from "next/link";
@@ -8,19 +9,20 @@ import { useEffect, useState } from "react";
 function Category(){
     const [category, setCategories] = useState<any>([]);
     const [reload, setReload] = useState(false);
-
+    const [page, setPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const limit = 5;
     const handlereload = () =>{
         setReload(!reload);
     }
     useEffect(() =>{
         const fetchCategories = async () =>{
-            // const response = await fetch("http://localhost:5000/api/category");
-            // const data = await response.json();
-            const result = await getCategories();
-            setCategories(result);
+            const result = await getCategories(page, limit);
+            setCategories(result.data);
+            setTotalPages(result.totalPages);
         }
         fetchCategories();
-    }, [reload]);
+    }, [reload, page]);
     console.log(category);
     const handleDelete = async (id:any) => {
         const confirmDelete = window.confirm("Bạn có chắc muốn xóa danh mục này?");
@@ -94,6 +96,7 @@ function Category(){
                     )}
                 </tbody>
             </table>
+            <Pagination page={page} totalPages={totalPages} setPage={setPage} />
         </>
     )
 }

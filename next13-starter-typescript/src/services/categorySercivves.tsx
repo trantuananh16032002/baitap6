@@ -1,7 +1,7 @@
 import { deleted, get, getByID, patch, post } from "@/utils/requests";
 
-export const getCategories = async () =>{
-    const result =await get("category");
+export const getCategories = async (page = 1, limit = 10) =>{
+    const result =await get("category",{ page, limit });
     return result;
 }
 export const postCategory = async (data:any) =>{

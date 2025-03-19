@@ -30,7 +30,7 @@ function EditCategory(){
                 // }
                 // const data = await res.json();
                 const result =await getCategories();
-                setCategories(formatCategories(result));
+                setCategories(formatCategories(result.data));
             } catch (err) {
                 console.error("Lỗi khi lấy danh mục:", err);
             }

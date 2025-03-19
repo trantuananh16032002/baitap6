@@ -2,12 +2,12 @@
 
 import Footer from "@/components/Footer/page";
 import Header from "@/components/Header/page";
-import { getProducts } from "@/lib/getProducts";
+import { getProducts } from "@/services/productServices";
 import { PUBLIC_DOMAIN } from "@/utils/requests";
 import { motion } from "framer-motion";
 import Link from "next/link";
 export default async function Home() {
-    const products = await getProducts();
+    const products = await getProducts(undefined,undefined,undefined,undefined,undefined,undefined);
     // console.log(products);
     return(
         <>
@@ -60,7 +60,7 @@ export default async function Home() {
             <div className="container">
             <div className="products__title">NEW ARRIVALS</div>
             <div className="products__wrapper mt-5">
-                {products.map((product : any) => (
+                {products.products?.map((product : any) => (
                     <Link key={product._id} href={`/product/${product._id}`} className="products__link">
                         <div key={product._id} className=" products__slide--item">
                             <img
@@ -87,7 +87,7 @@ export default async function Home() {
                 ))}
             </div>
                 
-                <Link href={"/product/listproduct"} className="products__button">
+                <Link href={"/product/ViewAllProduct"} className="products__button">
                     <button>View All</button>
                 </Link>
             </div>

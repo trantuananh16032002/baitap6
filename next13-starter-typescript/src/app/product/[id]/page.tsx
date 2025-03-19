@@ -3,9 +3,20 @@ import Header from "@/components/Header/page"
 import { getProductById } from "@/lib/getProductByID";
 import ProductAction from "../ProductAction";
 import { PUBLIC_DOMAIN } from "@/utils/requests";
-async function ProductDetail({ params }:any){
+
+async function ProductDetail({ params }: { params: any }){
     const productID = await getProductById(params.id)
     // console.log(product);
+    const defaultImages = [
+        "/img/prd2.svg",
+        "/img/prd2.svg",
+        "/img/prd2.svg"
+    ];
+    
+    const img1 = productID.images[1] ? `${PUBLIC_DOMAIN}${productID.images[1]}` : defaultImages[0];
+    const img2 = productID.images[2] ? `${PUBLIC_DOMAIN}${productID.images[2]}` : defaultImages[1];
+    const img3 = productID.images[3] ? `${PUBLIC_DOMAIN}${productID.images[3]}` : defaultImages[2];
+    
     return(
         <>
             <Header></Header>
@@ -23,14 +34,19 @@ async function ProductDetail({ params }:any){
                 <div className="detailProduct">
                     <div className="detailProduct__img">
                         <div className="detailProduct__img--small">
+                            {/* {productID.images.slice(1).map((image: string, index: number) => (
+                                <div key={index} className="detailProduct__img--small__item">
+                                    <img src={`${PUBLIC_DOMAIN}${image}`} alt={`Image ${index + 2}`} />
+                                </div>
+                            ))} */}
                             <div className="detailProduct__img--small__item">
-                                <img src="/img/menu.svg" alt=""/>
+                                <img src={img1} alt="Thumbnail 1" />
                             </div>
                             <div className="detailProduct__img--small__item">
-                                <img src="/img/prd2.svg" alt=""/>
+                                <img src={img2} alt="Thumbnail 2" />
                             </div>
                             <div className="detailProduct__img--small__item">
-                                <img src="/img/prd2.svg" alt=""/>
+                                <img src={img3} alt="Thumbnail 3" />
                             </div>
                         </div>
                         <div className="detailProduct__img--big">

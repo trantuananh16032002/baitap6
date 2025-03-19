@@ -2,7 +2,8 @@
 import { deleteProduct } from "@/services/productServices";
 import { useRouter } from "next/navigation";
 
-export default function DeleteButton({ productId }: { productId: string }) {
+export default function DeleteButton(props:any) {
+    const {productId,reload } = props;
     const router = useRouter();
 
     const handleDelete = async () => {
@@ -15,7 +16,8 @@ export default function DeleteButton({ productId }: { productId: string }) {
             const result = await deleteProduct(productId);
             if (result) {
                 alert("Xóa sản phẩm thành công!");
-                router.refresh(); // Làm mới trang sau khi xóa
+                // router.refresh(); 
+                reload();
             } else {
                 alert("Xóa sản phẩm thất bại!");
             }

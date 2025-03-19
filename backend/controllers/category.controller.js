@@ -3,16 +3,37 @@ const fs = require("fs");
 const path = require("path");
 
 module.exports.index = async (req, res) => {
-    try {
-        let categories = await Category.find();
+    // try {
+    //     let categories = await Category.find();
+    //     categories = categories.map(cat => ({
+    //         ...cat._doc,
+    //         parent_id: cat.parent_id === "null" ? null : cat.parent_id
+    //     }));
 
-        // Chuyển đổi parent_id từ chuỗi "null" thành null
+    //     res.status(200).json(categories);
+    // } catch (error) {
+    //     console.error("Lỗi khi lấy danh mục:", error);
+    //     res.status(500).json({ message: "Lỗi server!" });
+    // }
+    try {
+        let { page = 1, limit = 10 } = req.query;
+        page = parseInt(page);
+        limit = parseInt(limit);
+
+        const totalCount = await Category.countDocuments();
+        const totalPages = Math.ceil(totalCount / limit);
+        const skip = (page - 1) * limit;
+
+        let categories = await Category.find().limit(limit).skip(skip);
         categories = categories.map(cat => ({
             ...cat._doc,
             parent_id: cat.parent_id === "null" ? null : cat.parent_id
         }));
 
-        res.status(200).json(categories);
+        res.status(200).json({
+            data: categories,
+            totalPages
+        });
     } catch (error) {
         console.error("Lỗi khi lấy danh mục:", error);
         res.status(500).json({ message: "Lỗi server!" });

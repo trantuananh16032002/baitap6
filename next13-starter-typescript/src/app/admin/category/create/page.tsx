@@ -2,7 +2,7 @@
 
 import { getCategories, postCategory } from "@/services/categorySercivves";
 import { useEffect, useState } from "react";
-
+import { useRouter } from "next/navigation";
 function CreateCategory(){
     const [categories, setCategories] = useState<any[]>([]);
     const [formData, setFormData] = useState({
@@ -12,70 +12,83 @@ function CreateCategory(){
         thumbnail: null,
         status: "active",
     });
-    const [reloadP, setReloadP] = useState(false);
-    const handleReloadParentID = () => {
-        setReloadP(!reloadP);
-    };
+    const router = useRouter();
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                // const res = await fetch("http://localhost:5000/api/category");
-                // if (!res.ok) {
-                //     throw new Error(`Lỗi API: ${res.status}`);
-                // }
-                // const data = await res.json();
-                // console.log(data);
-                const data = await getCategories();
-                setCategories(formatCategories(data));
+                const data = await getCategories(undefined,undefined);
+                console.log(data.data);
+                setCategories(formatCategories(data.data));
             } catch (err) {
                 console.error("Lỗi khi lấy danh mục:", err);
             }
         };
         fetchCategories();
-    }, [reloadP]);
+    }, []);
     
     const handleChange = (e:any) => {
+        // const { name, value, type, files } = e.target;
+        // setFormData((prev) => ({
+        //   ...prev,
+        //   [name]: type === "file" ? files[0] : value, // Xử lý file upload
+        // }));
         const { name, value, type, files } = e.target;
-        setFormData((prev) => ({
-          ...prev,
-          [name]: type === "file" ? files[0] : value, // Xử lý file upload
+
+    if (type === "file" && files.length > 0) {
+        const file = files[0];
+
+        // Kiểm tra dung lượng file (<= 500KB)
+        if (file.size > 500 * 1024) { 
+            setErrors((prev) => ({
+                ...prev,
+                thumbnail: "*Ảnh phải nhỏ hơn 500KB!",
+            }));
+            return; // Không cập nhật state nếu ảnh không hợp lệ
+        }
+
+        // Nếu ảnh hợp lệ, xóa lỗi thumbnail (nếu có)
+        setErrors((prev) => ({
+            ...prev,
+            thumbnail: "",
         }));
+
+        setFormData((prev) => ({
+            ...prev,
+            [name]: file,
+        }));
+    } else {
+        setFormData((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
+    }
     };
     console.log(formData);
     // console.log(categories);
     const handleSubmit = async (e:any) => {
         e.preventDefault();
+        if (!validateForm()) return;
         try {
-          const formDataToSend = new FormData();
-          formDataToSend.append("title", formData.title);
-          formDataToSend.append("desc", formData.desc);
-          formDataToSend.append("parent_id", formData.parent_id);
-          formDataToSend.append("status", formData.status);
-          if (formData.thumbnail) {
-            formDataToSend.append("thumbnail", formData.thumbnail);
-          }
+            const formDataToSend = new FormData();
+            formDataToSend.append("title", formData.title);
+            formDataToSend.append("desc", formData.desc);
+            formDataToSend.append("parent_id", formData.parent_id);
+            formDataToSend.append("status", formData.status);
+            if (formData.thumbnail) {
+                formDataToSend.append("thumbnail", formData.thumbnail);
+            }
+            const result = await postCategory(formDataToSend);
     
-        //   const response = await fetch("http://localhost:5000/api/category", {
-        //     method: "POST",
-        //     body: formDataToSend,
-        //   });
-    
-        //   const result = await response.json();
-    
-        //   if (!response.ok) {
-        //     throw new Error(result.message || "Lỗi khi thêm danh mục");
-        //   }
-        const result = await postCategory(formDataToSend);
-    
-          alert("Thêm danh mục thành công!");
-          setFormData({
-            title: "",
-            desc: "",
-            parent_id: "",
-            thumbnail: null,
-            status: "active",
-          });
-          handleReloadParentID();
+            alert("Thêm danh mục thành công!");
+            router.replace("/admin/category");
+            router.refresh();
+            setFormData({
+                title: "",
+                desc: "",
+                parent_id: "",
+                thumbnail: null,
+                status: "active",
+            });
         } catch (err) {
         }
     };
@@ -95,6 +108,16 @@ function CreateCategory(){
     
         return nestedCategories;
     };
+    const [errors, setErrors] = useState<{ [key: string]: string }>({});
+    const validateForm = () => {
+        let newErrors: { [key: string]: string } = {};
+
+        if (!formData.title.trim()) newErrors.title = "*Tên danh mục không được để trống!";
+        if (!formData.desc.trim()) newErrors.desc = "*Mô tả không được để trống!";
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
     return(
         <>
             <h2 style={{fontSize:"2rem", fontWeight:"600", marginBottom:"40px"}}>Thêm danh mục sản phẩm</h2>
@@ -104,6 +127,7 @@ function CreateCategory(){
                         Tên danh mục
                     </label>
                     <input value={formData.title} type="text" name="title" className="form--add__item--input" placeholder="Tên danh mục" onChange={handleChange}/>
+                    {errors.title && <p className="error-message">{errors.title}</p>}
                 </div>
                 <div className="form--add__item">
                     <label className="form--add__item--label">
@@ -111,6 +135,7 @@ function CreateCategory(){
                     </label>
                     <textarea value={formData.desc} className="form--add__item--input" name="desc" onChange={handleChange}>
                     </textarea>
+                    {errors.desc && <p className="error-message">{errors.desc}</p>}
                 </div>
                 <div className="form--add__item">
                     <label className="form--add__item--label">
@@ -130,6 +155,7 @@ function CreateCategory(){
                         Ảnh
                     </label>
                     <input name="thumbnail" type="file" className="form--add__item--input form--add__item--input--file" onChange={handleChange} />
+                    {errors.thumbnail && <p className="error-message">{errors.thumbnail}</p>}
                 </div>
                 <div className="form--add__item">
                     <label className="form--add__item--label">
@@ -137,7 +163,7 @@ function CreateCategory(){
                     </label>
                     <div className="form--add__item--radio">
                         <div>
-                            <input type="radio" id="active" name="status" value="active" defaultChecked onChange={handleChange} checked={formData.status === "active"}/>
+                            <input type="radio" id="active" name="status" value="active" onChange={handleChange} checked={formData.status === "active"}/>
                             <label htmlFor="active">Hoạt động</label>
                         </div>
                         <div>

@@ -1,4 +1,4 @@
-import { APT_DOMAIN, PUBLIC_DOMAIN } from "@/utils/requests";
+import { APT_DOMAIN } from "@/utils/requests";
 
 export const getProducts = async () => {
   try {

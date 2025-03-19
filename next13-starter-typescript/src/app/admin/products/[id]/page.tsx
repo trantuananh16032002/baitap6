@@ -21,20 +21,13 @@ function EditProduct(){
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                // const res = await fetch("http://localhost:5000/api/category");
-                // if (!res.ok) {
-                //     throw new Error(`Lỗi API: ${res.status}`);
-                // }
-                // const data = await res.json();
                 const data = await getCategories();
-                setCategories(formatCategories(data));
+                setCategories(formatCategories(data.data));
             } catch (err) {
                 console.error("Lỗi khi lấy danh mục:", err);
             }
         };
         const fetchProductsID = async () =>{
-            // const response = await fetch(`http://localhost:5000/api/products/${id}`);
-            // const data = await response.json();
             const data = await getProductByID(id);
             console.log(data);
             setFormData(data);
@@ -64,11 +57,23 @@ function EditProduct(){
     };
 
     const handleImageChange = (e:any) => {
+        // const files = Array.from(e.target.files);
+        // setFormData((prevData:any) => ({
+        //     ...prevData,
+        //     images: [...prevData.images, ...files] 
+        // }));
         const files = Array.from(e.target.files);
-        setFormData((prevData:any) => ({
-            ...prevData,
-            images: [...prevData.images, ...files] 
-        }));
+        const validFiles = files.filter((file: any) => file.size <= 500 * 1024);
+
+        if (validFiles.length !== files.length) {
+            setErrors((prev) => ({ ...prev, images: "Ảnh không được vượt quá 500KB!" }));
+        } else {
+            setErrors((prev) => ({ ...prev, images: "" }));
+            setFormData((prevData: any) => ({
+                ...prevData,
+                images: [...prevData.images, ...validFiles],
+            }));
+        }
     };
     
 
@@ -78,7 +83,7 @@ function EditProduct(){
 
     const handleSubmit = async (e:any) => {
         e.preventDefault();
-    
+        if (!validateForm()) return;
         const formDataToSend = new FormData();
         formDataToSend.append("title", formData.title);
         formDataToSend.append("desc", formData.desc);
@@ -99,23 +104,36 @@ function EditProduct(){
             formDataToSend.append("images", image);
         });
         try {
-            // const res = await fetch(`http://localhost:5000/api/products/${id}`, {
-            //     method: "PATCH", 
-            //     body: formDataToSend,
-            // });
-            // if (!res.ok) throw new Error("Lỗi khi cập nhật sản phẩm");
             const result = await patchProduct(formDataToSend,id);
             if(result){
                 alert("Cập nhật sản phẩm thành công!");
                 router.refresh();
-                router.push("/admin/products");
+                router.replace("/admin/products");
             }
         } catch (error) {
             console.error("Lỗi cập nhật dữ liệu:", error);
         }
     };
-    
-    
+    const [errors, setErrors] = useState<{ [key: string]: string }>({});
+    const validateForm = () => {
+        let newErrors: { [key: string]: string } = {};
+
+        if (!formData.title.trim()) newErrors.title = "*Tên sản phẩm không được để trống!";
+        if (!formData.desc.trim()) newErrors.desc = "*Mô tả không được để trống!";
+        if (!formData.price || isNaN(Number(formData.price)) || Number(formData.price) <= 0) {
+            newErrors.price = "*Giá sản phẩm phải là số và lớn hơn 0!";
+        }
+        if (!formData.stock || isNaN(Number(formData.stock)) || Number(formData.stock) < 0) {
+            newErrors.stock = "*Số lượng tồn kho phải là số không âm!";
+        }
+        if (!formData.category_id) newErrors.category_id = "*Vui lòng chọn danh mục!";
+        if (formData.images.length === 0) newErrors.images = "*Vui lòng thêm ít nhất một ảnh!";
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
+
     return(
         <>
             <h2 style={{ fontSize: "2rem", fontWeight: "600", marginBottom: "40px" }}>Sửa sản phẩm</h2>
@@ -123,18 +141,22 @@ function EditProduct(){
                 <div className="form--add__item">
                     <label className="form--add__item--label">Tên sản phẩm</label>
                     <input type="text" name="title" value={formData.title} onChange={handleChange} className="form--add__item--input" placeholder="Nhập tên sản phẩm" />
+                    {errors.title && <p className="error-message">{errors.title}</p>}
                 </div>
                 <div className="form--add__item">
                     <label className="form--add__item--label">Mô tả</label>
                     <textarea name="desc" value={formData.desc} onChange={handleChange} className="form--add__item--input"></textarea>
+                    {errors.desc && <p className="error-message">{errors.desc}</p>}
                 </div>
                 <div className="form--add__item">
                     <label className="form--add__item--label">Giá</label>
                     <input type="number" name="price" value={formData.price} onChange={handleChange} className="form--add__item--input" />
+                    {errors.price && <p className="error-message">{errors.price}</p>}
                 </div>
                 <div className="form--add__item">
                     <label className="form--add__item--label">Số lượng tồn kho</label>
                     <input type="number" name="stock" value={formData.stock} onChange={handleChange} className="form--add__item--input" />
+                    {errors.stock && <p className="error-message">{errors.stock}</p>}
                 </div>
                 
                 <div className="form--add__item">
@@ -145,10 +167,12 @@ function EditProduct(){
                             <option key={cat._id} value={cat._id}>{cat.label}</option>
                         ))}
                     </select>
+                    {errors.category_id && <p className="error-message">{errors.category_id}</p>}
                 </div>
                 <div className="form--add__item">
                     <label className="form--add__item--label">Ảnh</label>
                     <input type="file" multiple onChange={handleImageChange} accept="image/*" className="form--add__item--input form--add__item--input--file" />
+                    {errors.images && <p className="error-message">{errors.images}</p>}
                 </div>
                 <div className="image-preview">
                     {formData.images.map((image:any, index:any) => (
