@@ -121,12 +121,21 @@ module.exports.getID = async (req, res) =>{
     }
 }
 module.exports.patch = async (req, res) => {
-    console.log("patch");
     try {
+        let errors = {};
         const { id } = req.params;
         const { title, desc, price, stock, category_id, status,existingImages } = req.body;
-        console.log("Dữ liệu body:", req.body);
-        console.log("File upload:", req.files);
+        // console.log("Dữ liệu body:", req.body);
+        // console.log("File upload:", req.files);
+
+        // Kiểm tra trùng lặp
+        const existingProduct = await Product.findOne({ title, _id: { $ne: id } });
+        if (existingProduct) errors.title = "Tên sản phẩm đã tồn tại";
+
+        // Nếu có lỗi, trả về lỗi để frontend lưu vào biến
+        if (Object.keys(errors).length > 0) {
+            return res.status(400).json({ errors });    
+        }
 
         const product = await Product.findById(id);
         if (!product) {

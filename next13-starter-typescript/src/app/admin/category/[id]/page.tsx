@@ -17,6 +17,8 @@ function EditCategory(){
         thumbnail: null,
         status: "active",
     });
+    const [errors, setErrors] = useState<{ [key: string]: string }>({});
+
     const [reloadP, setReloadP] = useState(false);
     const handleReloadParentID = () => {
         setReloadP(!reloadP);
@@ -105,10 +107,17 @@ function EditCategory(){
             //     throw new Error(`Lỗi cập nhật: ${response.status}`);
             // }
             const result = await patchCategory(bodyData, id);
-            if(result){
-                alert("Cập nhật danh mục thành công!");
-                router.push("/admin/category");
+            if(result.errors){
+                console.log(result.errors);
+                setErrors(result.errors);
+                return;
             }
+            // if(result){
+            //     alert("Cập nhật danh mục thành công!");
+            //     router.push("/admin/category");
+            // }
+            alert("Cập nhật danh mục thành công!");
+            router.push("/admin/category");
         } catch (error) {
             console.error("Lỗi khi cập nhật danh mục:", error);
             alert("Có lỗi xảy ra khi cập nhật danh mục.");
@@ -143,6 +152,7 @@ function EditCategory(){
                         Tên danh mục
                     </label>
                     <input value={formData.title} type="text" name="title" className="form--add__item--input" placeholder="Tên danh mục" onChange={handleChange}/>
+                    {errors.title && <p className="error-message">{errors.title}</p>}
                 </div>
                 <div className="form--add__item">
                     <label className="form--add__item--label">

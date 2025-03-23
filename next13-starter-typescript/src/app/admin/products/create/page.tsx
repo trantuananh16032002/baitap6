@@ -119,6 +119,7 @@ function CreateCategory() {
 
             // if (!res.ok) throw new Error("Lỗi khi gửi sản phẩm");
             const result = await postProducts(formDataToSend);
+            // console.log(result);
             if (result.errors) {
                 setErrors(result.errors); 
                 return; 

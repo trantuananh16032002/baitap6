@@ -5,6 +5,7 @@ import Header from "@/components/Header/page";
 import { getProducts } from "@/services/productServices";
 import { PUBLIC_DOMAIN } from "@/utils/requests";
 import { motion } from "framer-motion";
+import Image from "next/image";
 import Link from "next/link";
 export default async function Home() {
     const products = await getProducts(undefined,undefined,undefined,undefined,undefined,undefined);

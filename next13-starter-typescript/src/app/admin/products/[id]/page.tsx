@@ -17,6 +17,7 @@ function EditProduct(){
         status: "active",
         images: [],
     });
+    
     const [categories, setCategories] = useState<any>();
     useEffect(() => {
         const fetchCategories = async () => {
@@ -105,16 +106,20 @@ function EditProduct(){
         });
         try {
             const result = await patchProduct(formDataToSend,id);
-            if(result){
-                alert("Cập nhật sản phẩm thành công!");
-                router.refresh();
-                router.replace("/admin/products");
+            console.log(result);
+            if(result.errors){
+                setErrors(result.errors);
+                return;
             }
+            alert("Cập nhật sản phẩm thành công!");
+            router.refresh();
+            router.replace("/admin/products");
         } catch (error) {
             console.error("Lỗi cập nhật dữ liệu:", error);
         }
     };
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
+    console.log(errors);    
     const validateForm = () => {
         let newErrors: { [key: string]: string } = {};
 

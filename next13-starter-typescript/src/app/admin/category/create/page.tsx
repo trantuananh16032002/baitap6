@@ -78,7 +78,11 @@ function CreateCategory(){
                 formDataToSend.append("thumbnail", formData.thumbnail);
             }
             const result = await postCategory(formDataToSend);
-    
+            if (result.errors) {
+                console.log(result.errors); 
+                setErrors(result.errors); 
+                return; 
+            }
             alert("Thêm danh mục thành công!");
             router.replace("/admin/category");
             router.refresh();
