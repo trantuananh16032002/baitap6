@@ -8,6 +8,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 export default async function Home() {
+    
     const products = await getProducts(undefined,undefined,undefined,undefined,undefined,undefined);
     // console.log(products);
     return(
@@ -93,7 +94,7 @@ export default async function Home() {
                 </Link>
             </div>
         </div>
-          
+        
         <div className="customer">
             <div className="container">
                 <div className="customer__header">

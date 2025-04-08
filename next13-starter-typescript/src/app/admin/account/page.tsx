@@ -1,72 +1,63 @@
 "use client";
 import { getAccounts, postAccounts } from "@/services/accountServices";
 import { PUBLIC_DOMAIN } from "@/utils/requests";
-import { useEffect, useState } from "react";
+import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
+import { Editor } from "@tinymce/tinymce-react";
 
 function Account() {
     const [showForm, setShowForm] = useState(false);
     const [reload, setReload] = useState(false);
-    const [formData, setFormData] = useState({
+    const [formData, setFormData] = useState<any>({
         username: "",
         password: "",
         role: "",
-        image: null
+        images: [null, null, null, null],
     });
     const [account, SetAccount] = useState<any>();
-
+    const handleSetForm = () =>{
+        setShowForm(!showForm);
+    }
     useEffect(() => {
             const fetchAccount = async () => {
-                // try {
-                //     const response = await fetch("http://localhost:5000/api/accounts");
-                //     if (!response.ok) {
-                //         throw new Error("Unauthorized");
-                //     }
-                //     const data= await response.json();
-                //     SetAccount(data.data);
-                // } catch (error) {
-                //     console.error("Lỗi khi gọi API:", error);
-                // }
                 const data = await getAccounts();
                 SetAccount(data.data);
             };
             fetchAccount();
     }, [reload]);
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        const { name, value, type } = e.target;
-        if (type === "file" && e.target instanceof HTMLInputElement) {
-            const files = e.target.files;
-            setFormData((prev) => ({
-                ...prev,
-                [name]: files ? files[0] : null
-            }));
-        } else {
-            setFormData((prev) => ({
-                ...prev,
-                [name]: value
-            }));
-        }
+    const handleChange = (e:any) => {
+        const { name, value } = e.target;
+        setFormData((prev:any) => ({ ...prev, [name]: value }));
     };
-    const handleSetForm = () =>{
-        setShowForm(!showForm);
-    }
+    const handleImageChange = (index:any, event:any) => {
+        const file = event.target.files[0];
+        if (file) {
+            const newImages = [...formData.images];
+            newImages[index] = file 
+            setFormData((prev:any) => ({ ...prev, images: newImages }));
+        }
+        // Tạo URL để hiển thị ảnh preview
+        const previewUrl = URL.createObjectURL(file);
+        setFormData((prev:any) => ({ ...prev, [`previewImage${index + 1}`]: previewUrl }));
+    };
     // console.log(formData);
-    console.log(account);
+    // console.log(account);
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const data = new FormData();
         data.append("username", formData.username);
         data.append("password", formData.password);
         data.append("role", formData.role);
-        if (formData.image) {
-            data.append("image", formData.image);
-        }
-
+        data.append("content", createEditorContent);
+        formData.images.forEach((file:any, index:any) => {
+            if (file) {
+                data.append(`image`, file);
+            }
+        });
+        data.forEach((value, key) => {
+            console.log(`${key}:`, value);
+        });
         try {
-            // const response = await fetch("http://localhost:5000/api/accounts", {
-            //     method: "POST",
-            //     body: data
-            // });
-            // const result = await response.json();
             const post = await postAccounts(data);
             setReload(!reload);
             handleSetForm();
@@ -75,7 +66,22 @@ function Account() {
             console.error("Lỗi gửi dữ liệu:", error);
         }
     };
-
+    const [createEditorContent, setCreateEditorContent] = useState('');
+    const createEditorRef = useRef(null);
+    const editorConfig = {
+        height: 200,
+        menubar: true,
+        plugins: [
+            'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+            'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
+            'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount'
+        ],
+        toolbar: 'undo redo | blocks | ' +
+            'bold italic forecolor | alignleft aligncenter ' +
+            'alignright alignjustify | bullist numlist outdent indent | ' +
+            'removeformat | help',
+        content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
+    };
     return (
         <>
             <div className="content__action">
@@ -150,13 +156,34 @@ function Account() {
                             <option value="content_manager">Quản lý nội dung</option>
                         </select>
                     </div>
-                    <div className="form--create__input">
+                    {/* <div className="form--create__input">
                         <label className="form--create__input--label">Ảnh</label>
                         <input
                             type="file"
                             name="image"
                             onChange={handleChange}
                         />
+                    </div> */}
+                    <Editor
+                            apiKey='q241rxxlcpfwsdqjqbx2obdhb1mlc048mju8h4mhq356upoo'
+                            onInit={(evt:any, editor:any) => createEditorRef.current = editor}
+                            value={createEditorContent}
+                            onEditorChange={(content:any) => setCreateEditorContent(content)}
+                            init={editorConfig}
+                        />
+                    <div className="image-grid">
+                        {formData.images.map((img:any, index:any) => (
+                            <div key={index} className="image-box">
+                                {img ? (
+                                    <Image src={formData[`previewImage${index + 1}`]} alt={`Ảnh ${index + 1}`} className="preview-image" width={50} height={50}/>
+                                ) : (
+                                    <label className="image-placeholder">
+                                        <span>+</span>
+                                        <input type="file" accept="image/*" onChange={(e) => handleImageChange(index, e)} />
+                                    </label>
+                                )}
+                            </div>
+                        ))}
                     </div>
                     <div className="form--create__input">
                         <button className="form--create__input--button" type="submit">Lưu</button>

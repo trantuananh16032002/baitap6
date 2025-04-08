@@ -88,11 +88,11 @@ function CreateCategory() {
             }));
         }
     };
-
+    
     const handleRemoveImage = (index:any) => {
         setFormData(prev => ({ ...prev, images: prev.images.filter((_, i) => i !== index) }));
     };
-
+    
     const handleSubmit = async (e:any) => {
         e.preventDefault();
         if (!validateForm()) {
@@ -110,34 +110,37 @@ function CreateCategory() {
         formData.images.forEach(image => {
             formDataToSend.append("images", image);
         });
+        formDataToSend.forEach((value, key) => {
+            console.log(`${key}:`, value);
+        });
         // console.log(formDataToSend);
-        try {
-            // const res = await fetch("http://localhost:5000/api/products", {
-            //     method: "POST",
-            //     body: formDataToSend,
-            // });
+        // try {
+        //     // const res = await fetch("http://localhost:5000/api/products", {
+        //     //     method: "POST",
+        //     //     body: formDataToSend,
+        //     // });
 
-            // if (!res.ok) throw new Error("Lỗi khi gửi sản phẩm");
-            const result = await postProducts(formDataToSend);
-            // console.log(result);
-            if (result.errors) {
-                setErrors(result.errors); 
-                return; 
-            }
-            setFormData({
-                title: "",
-                desc: "",
-                price: "",
-                stock: "",
-                category_id: "",
-                status: "active",
-                images: [],
-            });
-            router.replace("/admin/products");
-            router.refresh();
-        } catch (error) {
-            console.error("Lỗi gửi dữ liệu:", error);
-        }
+        //     // if (!res.ok) throw new Error("Lỗi khi gửi sản phẩm");
+        //     const result = await postProducts(formDataToSend);
+        //     // console.log(result);
+        //     if (result.errors) {
+        //         setErrors(result.errors); 
+        //         return; 
+        //     }
+        //     setFormData({
+        //         title: "",
+        //         desc: "",
+        //         price: "",
+        //         stock: "",
+        //         category_id: "",
+        //         status: "active",
+        //         images: [],
+        //     });
+        //     router.replace("/admin/products");
+        //     router.refresh();
+        // } catch (error) {
+        //     console.error("Lỗi gửi dữ liệu:", error);
+        // }
     };
     // validate
     const [errors, setErrors] = useState<{ [key: string]: string }>({});

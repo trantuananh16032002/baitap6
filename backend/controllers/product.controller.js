@@ -28,7 +28,7 @@ module.exports.index = async (req, res) =>{
     const sortOption = sortOrder === "asc" ? { price: 1 } : { price: -1 };
     // search
     const search = req.query.search || "";
-    console.log(search);
+    // console.log(search);
     
     let categoryIds = [];
     if (category_id) {

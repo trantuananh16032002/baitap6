@@ -1,10 +1,10 @@
 // import './globals.css'
 import { Inter } from 'next/font/google'
-
+import ReduxProvider from "@/app/Provider/provider";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "@/styles/global.scss";
 import "@/styles/style.scss";
-
+// import 'antd/dist/antd.css';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -21,7 +21,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        {children}
+        <ReduxProvider>
+          {children}
+        </ReduxProvider>
       </body>
     </html>
   )

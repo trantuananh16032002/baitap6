@@ -9,9 +9,13 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@paypal/react-paypal-js": "^8.8.2",
+    "@reduxjs/toolkit": "^2.6.1",
+    "@tinymce/tinymce-react": "^6.1.0",
     "@types/node": "20.1.7",
     "@types/react": "18.2.6",
     "@types/react-dom": "18.2.4",
+    "antd": "^5.24.6",
     "bcryptjs": "^3.0.2",
     "bootstrap": "^5.3.3",
     "cookie-parser": "^1.4.7",
@@ -23,10 +27,14 @@
     "mongoose": "^8.12.1",
     "next": "^15.2.2",
     "rc-slider": "^11.1.8",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
     "react-flickity-component": "^4.0.7",
+    "react-google-autocomplete": "^2.7.4",
+    "react-modal": "^3.16.3",
+    "react-redux": "^9.2.0",
     "react-toastify": "^11.0.5",
+    "redux-thunk": "^3.1.0",
     "sass": "^1.85.1",
     "typescript": "5.0.4"
   }

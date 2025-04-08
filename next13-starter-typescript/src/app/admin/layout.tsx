@@ -54,6 +54,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                     <li className={`sidebar__item ${pathname.startsWith("/admin/category") ? "active" : ""}`}>
                         <Link className="sidebar__item--link" href="/admin/category">Danh mục sản phẩm</Link>
                     </li>
+                    <li className={`sidebar__item ${pathname.startsWith("/admin/variants") ? "active" : ""}`}>
+                        <Link className="sidebar__item--link" href="/admin/variants">Variant</Link>
+                    </li>
                 </ul>
             </div>
             <div className="maincontent">

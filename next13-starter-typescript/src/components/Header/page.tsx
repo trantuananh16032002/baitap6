@@ -1,8 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useDispatch, useSelector } from "react-redux";
+import { setCart } from "@/store/actions/cartActions";
 function Header(){
     const [searchTerm, setSearchTerm] = useState("");
     const router = useRouter();
@@ -13,6 +15,23 @@ function Header(){
             router.push(`/product/ViewAllProduct`); 
         }
     };
+    const cart = useSelector((state:any) => state.cartinfo.cart);
+    const dispatch = useDispatch();
+    useEffect(() => {
+        const fetchCart = async () => {
+            try {
+                const res = await fetch("http://localhost:5000/api/cart", {credentials: "include"});
+                const data = await res.json();
+                console.log(data);
+                // dispatch({ type: "SET_CART", payload: data }); 
+                dispatch(setCart(data)); 
+            } catch (error) {
+                console.error("Lỗi lấy giỏ hàng:", error);
+            }
+        };
+        fetchCart();
+    }, [dispatch]); 
+    console.log(cart);
 
     const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
         if (event.key === "Enter") {
@@ -44,7 +63,8 @@ function Header(){
                     </div>
                     <div className="action">
                         <a href=""><img src="/img/search.svg" alt="" className="d-block d-md-none"/></a>
-                        <a href=""><img src="/img/shop.svg" alt=""/></a>
+                        <Link href="/cart"><img src="/img/shop.svg" alt=""/></Link>
+                        <span>{cart.totalItems}</span>
                         <a href=""><img src="/img/user.svg" alt=""/></a>
                     </div>
                 </div>
